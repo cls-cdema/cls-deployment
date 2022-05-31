@@ -20,6 +20,8 @@ cd ${repo}
 cp ./.env.example ./.env
 
 sed -i "s/__DOMAIN__/${domain}/" /var/www/${domain}/.env
+sed -i "s/__DB__/${db}/" /var/www/${domain}/.env
+sed -i "s/__USER__/${user}/" /var/www/${domain}/.env
 sed -i "s/__PASS__/${pass}/" /var/www/${domain}/.env
 
 sudo cp /var/www/${domain}/run/etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-available/${domain}.conf
