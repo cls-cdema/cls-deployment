@@ -15,8 +15,9 @@ sudo chown -R www-data: /var/www/
 sudo apt-get install -y acl
 sudo setfacl -R -m u:$USER:rwx /var/www
 cd /var/www
-git clone ${repo}
-cd ${repo}
+git clone ${repo} ${domain}
+cd ${domain}
+git checkout develop -b
 cp ./.env.example ./.env
 
 sed -i "s/__DOMAIN__/${domain}/" /var/www/${domain}/.env
