@@ -35,6 +35,7 @@ if [ -f "$SSHKEY" ]; then
    echo "After setting up deployment key, you can proceed to next setp 2.configure_project."
    cat $SSHKEY
 else 
+  echo ""
 fi
 
 

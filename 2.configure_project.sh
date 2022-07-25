@@ -7,9 +7,9 @@ sudo setfacl -R -m u:$USER:rwx /var/www
 sudo cp ./data/000-default.conf /etc/apache2/sites-available/${domain}.conf
 
 cd /var/www
-git clone ${repo} ${domain}
+git clone -b ${branch} ${repo} ${domain}
 cd ${domain}
-git checkout develop -b
+#git checkout develop -b
 cp ./.env.example ./.env
 
 sed -i "s/__DOMAIN__/${domain}/g" /var/www/${domain}/.env
