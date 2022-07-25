@@ -28,8 +28,12 @@ This shell script will setup followings:
   - Cloning CLS project repository from github 
   - Setting up the project with the provided domain name in deployment .env file.
   - Creating database and database user. Database name and database password must be the same as defined in deployment .env file.
+  - Generating SSH key if not already exists.
 
- 5. Configure the project
+ 4. Configure the deployment key
+Copy the public key from terminal and setup deployment key in cls main repository.
+
+ 4. Configure the project
 This shell script will configure following settings.
  - Setting up default directories
  - Setting correct directory permission.
@@ -39,7 +43,7 @@ This shell script will configure following settings.
  
 > ./2.configure_project.sh
 
-6. Configure SSL certificate
+5. Configure SSL certificate
 This shell script will setup SSL certificate from Lets Encrypt with domain name from .env file. Before running this step, deployment server's IP address must be pointed as A or AA record from domain control panel.
 
 >  ./3._configure_ssl.sh

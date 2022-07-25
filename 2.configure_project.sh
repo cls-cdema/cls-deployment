@@ -1,6 +1,31 @@
 #!/bin/bash
 
 source .env
+sudo chown -R www-data: /var/www/
+sudo apt-get install -y acl
+sudo setfacl -R -m u:$USER:rwx /var/www
+cd /var/www
+git clone ${repo} ${domain}
+cd ${domain}
+git checkout develop -b
+cp ./.env.example ./.env
+
+sed -i "s/__DOMAIN__/${domain}/g" /var/www/${domain}/.env
+sed -i "s/__DB__/${db}/g" /var/www/${domain}/.env
+sed -i "s/__USER__/${user}/g" /var/www/${domain}/.env
+sed -i "s/__PASS__/${pass}/g" /var/www/${domain}/.env
+
+sudo cp /var/www/${domain}/run/etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-available/${domain}.conf
+
+sudo sed -i "s/__DOMAIN__/${domain}/g" /etc/apache2/sites-available/${domain}.conf
+sudo sed -i "s/__CONTACT__/${contact}/g" /etc/apache2/sites-available/${domain}.conf
+
+echo "Enabling site ${domain}..."
+sudo a2ensite ${domain}
+
+echo "Reloading Web server..."
+sudo systemctl reload apache2
+
 cd /var/www/${domain}
 
 echo "creating default folders.."
