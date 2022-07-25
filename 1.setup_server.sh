@@ -11,6 +11,15 @@ sudo a2dissite 000-default
 sudo apt install composer -y
 sudo apt install python3-certbot-apache -y
 
+
+sed -i "s/__DOMAIN__/${domain}/" ./data/db.sql
+sed -i "s/__DB__/${db}/" ./data/db.sql
+sed -i "s/__USER__/${user}/" ./data/db.sql
+sed -i "s/__PASS__/${pass}/" ./data/db.sql
+
+echo "Preparing MySQL Database and User..."
+sudo mysql < ./data/db.sql
+
 sudo chown -R www-data: /var/www/
 sudo apt-get install -y acl
 sudo setfacl -R -m u:$USER:rwx /var/www
@@ -35,5 +44,6 @@ sudo a2ensite ${domain}
 
 echo "Reloading Web server..."
 sudo systemctl reload apache2
-echo 'done'
-echo 'update .env file before proceeding to next step.'
+
+echo 'Please proceed to next step to configure the project'
+#echo 'update .env file before proceeding to next step.'

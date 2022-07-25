@@ -3,7 +3,7 @@
 source .env
 cd /var/www/${domain}
 
-echo "createing default folders.."
+echo "creating default folders.."
 sudo mkdir /var/www/${domain}/public/upload/import
 sudo mkdir /var/www/${domain}/public/upload/export
 sudo mkdir /var/www/${domain}/public/upload/library

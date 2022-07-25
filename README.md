@@ -27,14 +27,7 @@ This shell script will setup followings:
   - Apache Certbot 
   - Cloning CLS project repository from github 
   - Setting up the project with the provided domain name in deployment .env file.
-  
-4. Create database and database user. Database name and database password must be the same as defined in deployment .env file.
-
-> mysql CREATE DATABASE **DATABSE_NAME**;
->  CREATE USER 'cls'@'%' IDENTIFIED BY **'DATABSE_PASSWORD'**; 
->  GRANT ALL PRIVILEGES ON **DATABASE_NAME**.* TO 'cls'@'%';
->   FLUSH PRIVILEGES; 
->   exit;
+  - Creating database and database user. Database name and database password must be the same as defined in deployment .env file.
 
  5. Configure the project
 This shell script will configure following settings.
