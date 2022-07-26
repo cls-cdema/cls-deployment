@@ -80,6 +80,8 @@ sudo chown -R www-data:www-data /var/www/${domain}/storage
 sudo setfacl -R -m u:$USER:rwx /var/www
 
 echo 'updating Composer..'
+composer config allow-plugins.composer/installers true
+//pestphp/pest-plugin
 composer update
 
 echo 'migrating database..'
@@ -92,9 +94,9 @@ if [ $1 == "reset" ]
     echo 'running initial queries..'
     sudo mysql ${db} < /var/www/${domain}/database/sqls/initial.sql
 else 
+    php artisan migrate
     if [ $1 == '' ]
     then
-        php artisan migrate
         echo 'generating passport auth keys..'
         php artisan passport:install
     fi

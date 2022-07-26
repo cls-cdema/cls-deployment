@@ -17,6 +17,3 @@ sudo certbot --apache --agree-tos --redirect -m ${contact} -d ${domain}
 echo "Reloading Web server..."
 sudo systemctl reload apache2
 echo "success"
-
-# error in apache2 domain config
-# error in a2enmod
