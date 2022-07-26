@@ -1,14 +1,15 @@
 #!/bin/bash
 
 source .env
+sudo a2dissite ${domain}
 sudo chown -R www-data: /var/www/
 sudo apt-get install -y acl
 sudo setfacl -R -m u:$USER:rwx /var/www
 sudo cp ./data/000-default.conf /etc/apache2/sites-available/${domain}.conf
-ssh-keyscan github.com >>~/.ssh/known_hosts
 
 cd /var/www
 git clone -b ${branch} ${repo} ${domain}
+git config --global --add safe.directory /var/www/d1.cls-cdema.org
 cd ${domain}
 
 cp ./.env.example ./.env

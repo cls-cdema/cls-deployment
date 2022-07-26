@@ -8,6 +8,9 @@ sudo ufw allow 'Apache Full'
 sudo apt install mysql-server -y
 #sudo apt install php libapache2-mod-php php7.4-mysql php7.4-common php7.4-mysql php-xml php7.4-xmlrpc php7.4-curl php-gd php7.4-imagick php7.4-cli php7.4-dev php7.4-imap php7.4-mbstring php7.4-opcache php7.4-soap php7.4-zip php7.4-intl php-xml -y 
 sudo apt install php libapache2-mod-php php-mysql php-common php-mysql php-xml php-xmlrpc php-curl php-gd php-imagick php-cli php-dev php-imap php-mbstring php-opcache php-soap php-zip php-intl php-xml -y 
+
+ssh-keyscan github.com >>~/.ssh/known_hosts
+
 sudo a2dissite 000-default
 sudo a2enmod rewrite
 sudo apt install composer -y
