@@ -85,7 +85,8 @@ echo 'updating Composer..'
 composer update
 
 echo 'migrating database..'
-if [ $mode == "reset" ]
+if [ $mode == "reset" ];
+ then
     php artisan migrate:refresh
     echo 'generating passport auth keys..'
     #php artisan passport:keys
@@ -93,7 +94,8 @@ if [ $mode == "reset" ]
     echo 'running initial queries..'
     sudo mysql ${db} < /var/www/${domain}/database/sqls/initial.sql
 else 
-    if [ $mode == 'default' ]
+    if [ $mode == 'default' ];
+    then
         php artisan migrate
         echo 'generating passport auth keys..'
         php artisan passport:install
