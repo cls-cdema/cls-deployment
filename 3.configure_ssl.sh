@@ -15,5 +15,4 @@ echo "setting up SSL.."
 sudo certbot --apache --agree-tos --redirect -m ${contact} -d ${domain}
 
 echo "Reloading Web server..."
-sudo systemctl reload apache2
-echo "success"
+sudo systemctl restart apache2
