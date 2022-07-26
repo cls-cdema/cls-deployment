@@ -8,8 +8,16 @@ sudo setfacl -R -m u:$USER:rwx /var/www
 sudo cp ./data/000-default.conf /etc/apache2/sites-available/${domain}.conf
 
 cd /var/www
-git clone -b ${branch} ${repo} ${domain}
-git config --global --add safe.directory /var/www/d1.cls-cdema.org
+Directory=/var/www/${domain}
+if [ -d "$Directory" ];
+then
+	echo "found repo.."
+    git stash && git pull origin ${branch}
+else
+    git clone -b ${branch} ${repo} ${domain}
+    git config --global --add safe.directory /var/www/d1.cls-cdema.org
+fi
+
 cd ${domain}
 
 cp ./.env.example ./.env
@@ -31,11 +39,26 @@ sudo systemctl reload apache2
 cd /var/www/${domain}
 
 echo "creating default folders.."
+if [ -d /var/www/${domain}/public/upload/import ];
+then
 sudo mkdir /var/www/${domain}/public/upload/import
+fi
+if [ -d /var/www/${domain}/public/upload/export ];
+then
 sudo mkdir /var/www/${domain}/public/upload/export
+fi
+if [ -d /var/www/${domain}/public/upload/library ];
+then
 sudo mkdir /var/www/${domain}/public/upload/library
+fi
+if [ -d /var/www/${domain}/public/upload/location ];
+then
 sudo mkdir /var/www/${domain}/public/upload/location
+fi
+if [ -d /var/www/${domain}/public/upload/srf ];
+then
 sudo mkdir /var/www/${domain}/public/upload/srf
+fi
 
 echo 'setting permissions..'
 sudo chown -R www-data:www-data /var/www/${domain}/
@@ -44,6 +67,7 @@ sudo chown -R www-data:www-data /var/www/${domain}/public/upload
 sudo chmod -R 777 /var/www/${domain}/public/upload
 sudo chown -R www-data:www-data /var/www/${domain}/vendor
 sudo chown -R www-data:www-data /var/www/${domain}/storage
+sudo setfacl -R -m u:$USER:rwx /var/www
 
 echo 'updating Composer..'
 composer update
