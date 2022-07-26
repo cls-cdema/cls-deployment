@@ -1,6 +1,27 @@
 #!/bin/bash
 
 source .env
+
+echo "Welcome to CLS Pase1 Installer."
+echo "This will install server and setup CLS Phase 1 Project based on following environment settings."
+echo "Domain = ${domain}"
+echo "Database = ${db}"
+echo "Database User = ${user}"
+echo "Admin Email = ${contact}"
+echo "CLS Project Repository = ${repo}"
+echo "Repository Branch = {$branch}"
+echo ""
+read -p "Do you want to proceed? (yes/no) " yn
+
+case $yn in 
+	yes ) echo env confirmed;;
+	no ) echo exiting...;
+		exit;;
+	* ) echo invalid response;
+		exit 1;;
+esac
+
+echo "Updating system.."
 sudo apt update -y
 sudo apt upgrade -y
 sudo apt install git apache2 -y
