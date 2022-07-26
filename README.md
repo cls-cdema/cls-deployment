@@ -67,7 +67,7 @@ This shell script will setup followings:
 
 # CLS Phase 1 Server Resetting project only
 
- 2. Run the shell script file **2\.configure_project.sh**  with "reset" argument. to configure following settings.
+ 1. Run the shell script file **2\.configure_project.sh**  with "reset" argument. to configure following settings.
  - Removing existing project files.
  - Cloning CLS project repository from github.
  - Setting up the project with the provided domain name in deployment .env file. 
