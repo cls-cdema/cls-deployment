@@ -98,7 +98,7 @@ if [ "$1" = "reset" ]
     #php artisan passport:keys
     php artisan passport:install --force
     echo 'running initial queries..'
-    sudo mysql ${db} < /var/www/${domain}/database/sqls/initial.sql
+    sudo mysql ${db} < /var/www/${domain}/database/sqls/seed.sql
 else 
     php artisan migrate
     if [ "$1" = "" ]
