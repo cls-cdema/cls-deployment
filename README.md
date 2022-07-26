@@ -32,14 +32,14 @@ This shell script will setup followings:
  4. Configure the deployment key - Copy the public key from terminal and setup deployment key in cls main repository.
 
  5. Run the shell script file   **2\.configure_project.sh** to configure following settings.
- - Cloning CLS project repository from github 
+ - Cloning CLS project repository from github. 
  - Setting up the project with the provided domain name in deployment .env file. 
- - Setting up the default directories
+ - Setting up the default directories.
  - Setting correct directory permission.
- - Updating composer libraries
- - Initial migration of database
- - Initial data seeding
- - Generating passport authentication keys
+ - Updating composer libraries.
+ - Initial migration of database.
+ - Initial data seeding.
+ - Generating passport authentication keys.
 
 > sudo ./2.configure_project.sh
 
@@ -54,14 +54,14 @@ This shell script will setup followings:
 > sudo ./1.setup_server.sh update
 
 This shell script will setup followings:
- - Updating Apahe Web server 
- - Updating PHP and required extensions  
- - Updating Mysql database server 
+ - Updating Apahe Web server.
+ - Updating PHP and required extensions.
+ - Updating Mysql database server.
 
  2. Run the shell script file **2\.configure_project.sh**  with "update" argument. to configure following settings.
- - Pulling last commit of project from github repo
- - Updating composer libraries
- - Migrating of database changes
+ - Pulling last commit of project from github repo.
+ - Updating composer libraries.
+ - Migrating of database changes.
 
 > sudo ./2.configure_project.sh update
 
@@ -71,11 +71,12 @@ This shell script will setup followings:
  - Removing existing project files.
  - Cloning CLS project repository from github.
  - Setting up the project with the provided domain name in deployment .env file. 
- - Setting up the default directories
+ - Setting up the default directories.
  - Setting correct directory permission.
- - Updating composer libraries
- - Initial migration of database
- - Initial data seeding
- - Generating passport authentication keys
+ - Updating composer libraries.
+ - Dropping existing database.
+ - Initial migration of database.
+ - Initial data seeding.
+ - Generating passport authentication keys.
 
 > sudo ./2.configure_project.sh reset
