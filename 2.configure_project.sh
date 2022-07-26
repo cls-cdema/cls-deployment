@@ -8,6 +8,8 @@ sudo setfacl -R -m u:$USER:rwx /var/www
 sudo cp ./data/000-default.conf /etc/apache2/sites-available/${domain}.conf
 
 cd /var/www
+ssh-keyscan github.com >>~/.ssh/known_hosts
+
 Directory=/var/www/${domain}
 if [ -d "$Directory" ]
 then
@@ -80,8 +82,7 @@ sudo chown -R www-data:www-data /var/www/${domain}/storage
 sudo setfacl -R -m u:$USER:rwx /var/www
 
 echo 'updating Composer..'
-composer config allow-plugins.composer/installers true
-//pestphp/pest-plugin
+
 composer update
 
 echo 'migrating database..'
