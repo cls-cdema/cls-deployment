@@ -10,6 +10,7 @@ exit ;
 else
 echo "waiting.."
 fi
+done
 
 echo "setting up SSL.."
 sudo certbot --apache --agree-tos --redirect -m ${contact} -d ${domain}
