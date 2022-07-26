@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source .env
+mode="${mode:-default}"
 sudo a2dissite ${domain}
 sudo chown -R www-data: /var/www/
 sudo apt-get install -y acl
@@ -12,7 +13,7 @@ Directory=/var/www/${domain}
 if [ -d "$Directory" ];
 then
 	echo "found repo.."
-    if [ $1 == "reset" ]
+    if [ $mode == "reset" ]
     then
         echo "cleaning existing site.."
         sudo rm -R /var/www/${domain}
@@ -84,13 +85,17 @@ echo 'updating Composer..'
 composer update
 
 echo 'migrating database..'
-php artisan migrate
-
-echo 'generating passport auth keys..'
-#php artisan passport:keys
-php artisan passport:install
-
-echo 'running initial queries..'
-sudo mysql ${db} < /var/www/${domain}/database/sqls/initial.sql
-
-echo 'setup correct DNS in domain setting before proceeding next step'
+if [ $mode == "reset" ]
+    php artisan migrate:refresh
+    echo 'generating passport auth keys..'
+    #php artisan passport:keys
+    php artisan passport:install --force
+    echo 'running initial queries..'
+    sudo mysql ${db} < /var/www/${domain}/database/sqls/initial.sql
+else 
+    if [ $mode == 'default' ]
+        php artisan migrate
+        echo 'generating passport auth keys..'
+        php artisan passport:install
+    fi
+fi
