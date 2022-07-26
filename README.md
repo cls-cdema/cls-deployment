@@ -4,6 +4,7 @@
  
 > cd ~ git clone  [https://github.com/cls-cdema/cls-deployment](mailto:https://github.com/cls-cdema/cls-deployment)
 > cd cls-deployment 
+> cp .env.example .env
 > sudo chmod +x *.sh
 
 2. Update deployment .env file. Deployment .env file contains configuration for primary domain and contact email of deployment server and database password for database user account to be generated. following are default .env contents.
