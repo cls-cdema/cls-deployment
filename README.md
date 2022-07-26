@@ -1,4 +1,4 @@
-# CLS Phase 1 Server setup instruction (Fresh Installation)
+# CLS Phase 1: Fresh Installation
 
  1. Clone repository and set permission for setup script. each setup script can be checked against a texteditor before setting permissions.
  
@@ -47,7 +47,7 @@ This shell script will setup followings:
 
 >  sudo ./3._configure_ssl.sh
 
-# CLS Phase 1 Server update instruction
+# CLS Phase 1: Updating Servers
 
 1. Run shell script file **1\.setup_server.sh** file with "update" argument. There may be several user confirmations during setup process. If system asked to restart services for outdated kernel/ services, it needs to select all.
 
@@ -65,7 +65,7 @@ This shell script will setup followings:
 
 > sudo ./2.configure_project.sh update
 
-# CLS Phase 1 Server Resetting project only
+# CLS Phase 1: Resetting project only
 
  1. Run the shell script file **2\.configure_project.sh**  with "reset" argument. to configure following settings.
  - Removing existing project files.

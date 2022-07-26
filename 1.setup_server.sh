@@ -2,7 +2,7 @@
 
 source .env
 
-echo "Welcome to CLS Pase1 Installer."
+echo "Welcome to CLS Pase 1 Installer 1.0.0."
 echo "This will install server and setup CLS Phase 1 Project based on following environment settings from ./env file."
 echo ""
 echo "Domain = ${domain}"
@@ -12,6 +12,10 @@ echo "Admin Email = ${contact}"
 echo "CLS Project Repository = ${repo}"
 echo "Repository Branch = {$branch}"
 echo ""
+if [ "$1" = "update" ]
+ then
+ echo "Update mode.."
+ else
 read -p "Do you want to proceed? (yes/no) " yn
 
 case $yn in 
@@ -21,10 +25,18 @@ case $yn in
 	* ) echo invalid response;
 		exit 1;;
 esac
+fi
 
 echo "Updating system.."
-sudo apt update -y
-sudo apt upgrade -y
+#sudo apt update -y
+#sudo apt upgrade -y
+
+export DEBIAN_FRONTEND=noninteractive
+export DEBIAN_PRIORITY=critical
+sudo -E apt-get -qy update
+sudo -E apt-get -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" upgrade
+sudo -E apt-get -qy autoclean
+
 sudo apt install git apache2 -y
 sudo ufw allow 'Apache Full'
 sudo apt install mysql-server -y
