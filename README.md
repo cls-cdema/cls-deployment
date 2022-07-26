@@ -9,7 +9,7 @@
 
 2. Update deployment .env file. Deployment .env file contains configuration for primary domain and contact email of deployment server and database password for database user account to be generated. following are default .env contents.
 
-> repo=git@github.com:cls-cdema/cls-laravel.git
+> repo=https://github.com/cls-cdema/cls-deployment.git
 > domain=cls-cdema.org
 > contact=e2ecdema@gmail.com
 > pass=somedbpassword

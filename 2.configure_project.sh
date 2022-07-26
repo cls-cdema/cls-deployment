@@ -5,11 +5,12 @@ sudo chown -R www-data: /var/www/
 sudo apt-get install -y acl
 sudo setfacl -R -m u:$USER:rwx /var/www
 sudo cp ./data/000-default.conf /etc/apache2/sites-available/${domain}.conf
+ssh-keyscan github.com >>~/.ssh/known_hosts
 
 cd /var/www
 git clone -b ${branch} ${repo} ${domain}
 cd ${domain}
-#git checkout develop -b
+
 cp ./.env.example ./.env
 
 sed -i "s/__DOMAIN__/${domain}/g" /var/www/${domain}/.env
@@ -50,9 +51,10 @@ echo 'migrating database..'
 php artisan migrate
 
 echo 'generating passport auth keys..'
-php artisan passport:keys
+#php artisan passport:keys
+php artisan passport:install
 
 echo 'running initial queries..'
 sudo mysql ${db} < /var/www/${domain}/database/sqls/initial.sql
-echo 'done';
+
 echo 'setup correct DNS in domain setting before proceeding next step'
