@@ -12,7 +12,18 @@ Directory=/var/www/${domain}
 if [ -d "$Directory" ];
 then
 	echo "found repo.."
-    git stash && git pull origin ${branch}
+    if [ $1 == "reset" ]
+    then
+        echo "cleaning existing site.."
+        sudo rm -R /var/www/${domain}
+        git clone -b ${branch} ${repo} ${domain}
+        git config --global --add safe.directory /var/www/d1.cls-cdema.org
+    else
+        cd ${domain}
+        git stash && git pull origin ${branch}
+        cd /var/www/
+    fi
+   
 else
     git clone -b ${branch} ${repo} ${domain}
     git config --global --add safe.directory /var/www/d1.cls-cdema.org
