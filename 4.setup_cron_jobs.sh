@@ -1,11 +1,19 @@
 #!/bin/bash
 
 source .env
-if[ "${dropbox_key}" = ""]
-then
-    echo "Please set correct dropbox api key in .env file and run again."
-    exit;
-fi
+
+echo "Database backup will be setup with following dropbox API key"
+echo ${dropbox_key}
+read -p "Do you want to proceed? (yes/no) " yn
+
+case $yn in 
+	yes ) echo env confirmed;;
+	no ) echo exiting...;
+		exit;;
+	* ) echo invalid response;
+		exit 1;;
+esac
+
 sudo crontab -l > cron_bkp
 sudo echo "0 */6 * * * $(pwd)/db_backup.sh >/dev/null 2>&1" >> cron_bkp
 sudo crontab cron_bkp
