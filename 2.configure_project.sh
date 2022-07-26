@@ -5,7 +5,12 @@ sudo a2dissite ${domain}
 sudo chown -R www-data: /var/www/
 sudo apt-get install -y acl
 sudo setfacl -R -m u:$USER:rwx /var/www
-sudo cp ./data/000-default.conf /etc/apache2/sites-available/${domain}.conf
+if [ "$1" = "" ]
+then
+    sudo cp ./data/000-default.conf /etc/apache2/sites-available/${domain}.conf
+else
+    echo "Skip domain configuration.."
+fi
 
 cd /var/www
 ssh-keyscan github.com >>~/.ssh/known_hosts

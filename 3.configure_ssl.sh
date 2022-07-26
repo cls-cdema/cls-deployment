@@ -11,6 +11,8 @@ sudo certbot --apache --agree-tos --redirect -m ${contact} -d ${domain}
 
 echo "Reloading Web server..."
 sudo systemctl restart apache2
+
+echo "Lets Encrypt Certificate setup complete."
 exit ;
 else
 echo "waiting.."
