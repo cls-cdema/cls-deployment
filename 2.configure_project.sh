@@ -56,24 +56,40 @@ sudo systemctl reload apache2
 cd /var/www/${domain}
 
 echo "creating default folders.."
+if [ -d /var/www/${domain}/public/upload ]
+then
+echo "upload folder exists."
+else
+sudo mkdir /var/www/${domain}/public/upload/import
+fi
 if [ -d /var/www/${domain}/public/upload/import ]
 then
+echo "import folder exists."
+else
 sudo mkdir /var/www/${domain}/public/upload/import
 fi
 if [ -d /var/www/${domain}/public/upload/export ]
 then
+echo "export folder exists."
+else
 sudo mkdir /var/www/${domain}/public/upload/export
 fi
 if [ -d /var/www/${domain}/public/upload/library ]
 then
+echo "library folder exists."
+else
 sudo mkdir /var/www/${domain}/public/upload/library
 fi
 if [ -d /var/www/${domain}/public/upload/location ]
 then
+echo "location folder exists."
+else
 sudo mkdir /var/www/${domain}/public/upload/location
 fi
 if [ -d /var/www/${domain}/public/upload/srf ]
 then
+echo "srf folder exists."
+else
 sudo mkdir /var/www/${domain}/public/upload/srf
 fi
 
