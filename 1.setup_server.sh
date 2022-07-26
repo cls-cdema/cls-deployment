@@ -3,7 +3,8 @@
 source .env
 
 echo "Welcome to CLS Pase1 Installer."
-echo "This will install server and setup CLS Phase 1 Project based on following environment settings."
+echo "This will install server and setup CLS Phase 1 Project based on following environment settings from ./env file."
+echo ""
 echo "Domain = ${domain}"
 echo "Database = ${db}"
 echo "Database User = ${user}"
