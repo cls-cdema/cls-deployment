@@ -1,7 +1,6 @@
 #!/bin/bash
 
 source .env
-mode="${mode:-default}"
 sudo a2dissite ${domain}
 sudo chown -R www-data: /var/www/
 sudo apt-get install -y acl
@@ -10,10 +9,10 @@ sudo cp ./data/000-default.conf /etc/apache2/sites-available/${domain}.conf
 
 cd /var/www
 Directory=/var/www/${domain}
-if [ -d "$Directory" ];
+if [ -d "$Directory" ]
 then
 	echo "found repo.."
-    if [ $mode == "reset" ]
+    if [ $1 == "reset" ]
     then
         echo "cleaning existing site.."
         sudo rm -R /var/www/${domain}
@@ -42,7 +41,6 @@ sed -i "s/__PASS__/${pass}/g" /var/www/${domain}/.env
 sudo sed -i "s/__DOMAIN__/${domain}/g" /etc/apache2/sites-available/${domain}.conf
 sudo sed -i "s/__CONTACT__/${contact}/g" /etc/apache2/sites-available/${domain}.conf
 
-echo "Enabling site ${domain}..."
 sudo a2ensite ${domain}
 
 echo "Reloading Web server..."
@@ -51,23 +49,23 @@ sudo systemctl reload apache2
 cd /var/www/${domain}
 
 echo "creating default folders.."
-if [ -d /var/www/${domain}/public/upload/import ];
+if [ -d /var/www/${domain}/public/upload/import ]
 then
 sudo mkdir /var/www/${domain}/public/upload/import
 fi
-if [ -d /var/www/${domain}/public/upload/export ];
+if [ -d /var/www/${domain}/public/upload/export ]
 then
 sudo mkdir /var/www/${domain}/public/upload/export
 fi
-if [ -d /var/www/${domain}/public/upload/library ];
+if [ -d /var/www/${domain}/public/upload/library ]
 then
 sudo mkdir /var/www/${domain}/public/upload/library
 fi
-if [ -d /var/www/${domain}/public/upload/location ];
+if [ -d /var/www/${domain}/public/upload/location ]
 then
 sudo mkdir /var/www/${domain}/public/upload/location
 fi
-if [ -d /var/www/${domain}/public/upload/srf ];
+if [ -d /var/www/${domain}/public/upload/srf ]
 then
 sudo mkdir /var/www/${domain}/public/upload/srf
 fi
@@ -85,7 +83,7 @@ echo 'updating Composer..'
 composer update
 
 echo 'migrating database..'
-if [ $mode == "reset" ];
+if [ $1 == "reset" ]
  then
     php artisan migrate:refresh
     echo 'generating passport auth keys..'
@@ -94,7 +92,7 @@ if [ $mode == "reset" ];
     echo 'running initial queries..'
     sudo mysql ${db} < /var/www/${domain}/database/sqls/initial.sql
 else 
-    if [ $mode == 'default' ];
+    if [ $1 == '' ]
     then
         php artisan migrate
         echo 'generating passport auth keys..'
