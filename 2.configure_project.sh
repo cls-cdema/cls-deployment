@@ -14,7 +14,7 @@ Directory=/var/www/${domain}
 if [ -d "$Directory" ]
 then
 	echo "found repo.."
-    if [ $1 == "reset" ]
+    if [ "$1" = "reset" ]
     then
         echo "cleaning existing site.."
         sudo rm -R /var/www/${domain}
@@ -86,7 +86,7 @@ echo 'updating Composer..'
 composer update
 
 echo 'migrating database..'
-if [ $1 == "reset" ]
+if [ "$1" = "reset" ]
  then
     php artisan migrate:refresh
     echo 'generating passport auth keys..'
@@ -96,7 +96,7 @@ if [ $1 == "reset" ]
     sudo mysql ${db} < /var/www/${domain}/database/sqls/initial.sql
 else 
     php artisan migrate
-    if [ $1 == '' ]
+    if [ "$1" = "" ]
     then
         echo 'generating passport auth keys..'
         php artisan passport:install
