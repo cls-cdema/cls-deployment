@@ -81,3 +81,8 @@ This shell script will setup followings:
  - Generating passport authentication keys.
 
 > sudo ./2.configure_project.sh reset
+
+
+# CLS Phase 1: Cron Jbs for database backup and server update
+
+1. Run 4.setup_cron_jobs.sh file to register cron jobs. Database backup script will run every 6 Hours daily and Server update script will run monthly.
