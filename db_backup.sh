@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source .env
-DROPBOX='/CLS_Database_Backups/';=
+DROPBOX='/CLS_Database_Backups/'
 FILENAME=${db}_$(date +backup_%H-%M-%d-%m-%Y.tar.gz);
 backups=$(pwd)/backups
 mkdir -p ${backups}
