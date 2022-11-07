@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source .env
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+cd ${SCRIPT_DIR}
+source ${SCRIPT_DIR}/.env
 
 echo "Welcome to CLS Pase 1 Installer 1.0.0."
 echo "This will install server and setup CLS Phase 1 Project based on following environment settings from ./env file."

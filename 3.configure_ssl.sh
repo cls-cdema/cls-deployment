@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source .env
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+cd ${SCRIPT_DIR}
+source ${SCRIPT_DIR}/.env
 host ${domain}
 echo "Please setup above IP address as A/AAA DNS entry in domain setting before setting up SSL. Press any key to continute"
 while [ true ] ; do

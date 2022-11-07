@@ -1,6 +1,9 @@
 #!/bin/bash
 
-source .env
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+cd ${SCRIPT_DIR}
+source ${SCRIPT_DIR}/.env
+
 sudo a2dissite ${domain}
 sudo chown -R www-data: /var/www/
 sudo apt-get install -y acl
@@ -73,6 +76,12 @@ then
 echo "export folder exists."
 else
 sudo mkdir /var/www/${domain}/public/upload/export
+fi
+if [ -d /var/www/${domain}/public/temp ]
+then
+echo "temporary folder exists."
+else
+sudo mkdir /var/www/${domain}/public/temp
 fi
 if [ -d /var/www/${domain}/public/upload/library ]
 then
