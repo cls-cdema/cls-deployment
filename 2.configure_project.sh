@@ -118,6 +118,7 @@ composer update
 echo 'migrating database..'
 if [ "$1" = "reset" ]
  then
+    
     php artisan migrate:refresh
     echo 'generating passport auth keys..'
     #php artisan passport:keys
