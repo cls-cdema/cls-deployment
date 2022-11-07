@@ -118,7 +118,7 @@ composer update
 echo 'migrating database..'
 if [ "$1" = "reset" ]
  then
-    
+    sudo mysql < ${SCRIPT_DIR}/data/db.sql
     php artisan migrate:refresh
     echo 'generating passport auth keys..'
     #php artisan passport:keys
