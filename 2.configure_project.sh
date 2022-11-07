@@ -131,5 +131,7 @@ else
     then
         echo 'generating passport auth keys..'
         php artisan passport:install
+    echo 'running initial queries..'
+    sudo mysql ${db} < /var/www/${domain}/database/sqls/seed.sql
     fi
 fi
