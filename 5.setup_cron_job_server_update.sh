@@ -17,6 +17,7 @@ esac
 echo ${SCRIPT_DIR}
 
 sudo crontab -l > cron_bkp
-sudo echo "0 0 1 * * $(pwd)/1.setup_server.sh update >/dev/null 2>&1" >> cron_bkp
+#
+sudo echo "0 0 1 1 * $(pwd)/1.setup_server.sh update >/dev/null 2>&1" >> cron_bkp
 sudo crontab cron_bkp
 sudo rm cron_bkp
