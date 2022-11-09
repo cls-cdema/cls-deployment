@@ -24,17 +24,18 @@ then
 	echo "found repo.."
     if [ "$1" = "reset" ]
     then
-        echo "cleaning existing site.."
+        echo "cleaning existing site..."
         sudo rm -R /var/www/${domain}
         git clone -b ${branch} ${repo} ${domain}
         git config --global --add safe.directory /var/www/d1.cls-cdema.org
     else
         cd ${domain}
-        git stash && git pull origin ${branch}
-        cd /var/www/
+        echo "Updating latest repository..."
+        git stash && git pull origin ${branch}eeee
     fi
    
 else
+    echo "Cloning Git repository into branch ${branch}..."
     git clone -b ${branch} ${repo} ${domain}
     git config --global --add safe.directory /var/www/d1.cls-cdema.org
 fi
@@ -42,15 +43,17 @@ fi
 cd ${domain}
 
 cp ./.env.example ./.env
-
+echo "Updating environment variables for laravel..."
 sed -i "s/__DOMAIN__/${domain}/g" /var/www/${domain}/.env
 sed -i "s/__DB__/${db}/g" /var/www/${domain}/.env
 sed -i "s/__USER__/${user}/g" /var/www/${domain}/.env
 sed -i "s/__PASS__/${pass}/g" /var/www/${domain}/.env
 
+echo "Updating environment variables apache configuration..."
 sudo sed -i "s/__DOMAIN__/${domain}/g" /etc/apache2/sites-available/${domain}.conf
 sudo sed -i "s/__CONTACT__/${contact}/g" /etc/apache2/sites-available/${domain}.conf
 
+echo "Enabling domain ${domain} in Apache configuration..."
 sudo a2ensite ${domain}
 
 echo "Reloading Web server..."
@@ -58,7 +61,7 @@ sudo systemctl reload apache2
 
 cd /var/www/${domain}
 
-echo "creating default folders.."
+echo "Creating Default Folders.."
 if [ -d /var/www/${domain}/public/upload ]
 then
 echo "upload folder exists."
@@ -102,7 +105,7 @@ else
 sudo mkdir /var/www/${domain}/public/upload/srf
 fi
 
-echo 'setting permissions..'
+echo 'Setting up directory permissions..'
 sudo chown -R www-data:www-data /var/www/${domain}/
 sudo chmod -R 765 /var/www/${domain}/
 sudo chown -R www-data:www-data /var/www/${domain}/public/upload
@@ -111,27 +114,27 @@ sudo chown -R www-data:www-data /var/www/${domain}/vendor
 sudo chown -R www-data:www-data /var/www/${domain}/storage
 sudo setfacl -R -m u:$USER:rwx /var/www
 
-echo 'updating Composer..'
+echo 'Updating Composer..'
 
 composer update
 
-echo 'migrating database..'
+echo 'Migrating Database..'
 if [ "$1" = "reset" ]
  then
     sudo mysql < ${SCRIPT_DIR}/data/db.sql
     php artisan migrate:refresh
-    echo 'generating passport auth keys..'
+    echo 'Generating Passport Auth Keys..'
     #php artisan passport:keys
     php artisan passport:install --force
-    echo 'running initial queries..'
+    echo 'Running Initial Queries..'
     sudo mysql ${db} < /var/www/${domain}/database/sqls/seed.sql
 else 
     php artisan migrate
     if [ "$1" = "" ]
     then
-        echo 'generating passport auth keys..'
+        echo 'Generating Passport Auth Keys..'
         php artisan passport:install
-    echo 'running initial queries..'
-    sudo mysql ${db} < /var/www/${domain}/database/sqls/seed.sql
+        echo 'Running Initial Queries..'
+        sudo mysql ${db} < /var/www/${domain}/database/sqls/seed.sql
     fi
 fi
