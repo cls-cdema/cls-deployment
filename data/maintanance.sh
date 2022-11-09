@@ -6,8 +6,8 @@ cd /var/www/${domain}
 echo "Enabling maintanance mode.."
 php artisan down
 echo "Cleaning directories.."
-sudo rm /var/www/${domain}/public/upload/temp/* -R
-sudo rm /var/www/${domain}/public/upload/export/* -R
+sudo rm -r /var/www/${domain}/public/temp/*
+sudo rm -r /var/www/${domain}/public/upload/export/* 
 echo "Disabling maintanance mode.."
 sudo rm storage/framework/down
 php artisan up
