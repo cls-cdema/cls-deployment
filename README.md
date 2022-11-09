@@ -180,11 +180,18 @@ This shell script will setup the following:
 
 # CLS Phase 1: Complete All in One install 
 1. Run shell script file **1\.setup_server.sh** file with "complete" argument. There may be several user confirmations during setup process. If system asks to restart services for outdated kernel/ services, all need to be selected.
-2. It is very import to be ready to  have following main points to run in complete mode
+2. This will install 4 step sequencially
+ 
+		1.setup_server.sh
+		2.configure_project.sh
+		3._configure_ssl.sh
+		4.setup_cron_job_backup_maintanance.sh
+		
+	
+4. It is very import to be ready to  have following main points to run in complete mode
 	1. .env is ready
 	2.  SSH key is arelay imported as deployed key
 	3. domain is correctly configured to point to server ip.
-
   
 
 >  ./1.setup_server.sh complete
