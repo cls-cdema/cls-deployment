@@ -102,6 +102,6 @@ if [ "$1" = "complete" ]
  then
  echo "Complete Mode.."
  ${SCRIPT_DIR}/2.configure_project.sh
- ${SCRIPT_DIR}/3.configure_ssl.sh
- ${SCRIPT_DIR}/4.setup_cron_job_backup_maintanance.sh
+ ${SCRIPT_DIR}/3.configure_ssl.sh y
+ ${SCRIPT_DIR}/4.setup_cron_job_backup_maintanance.sh y
 fi

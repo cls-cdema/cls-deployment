@@ -4,6 +4,10 @@ source .env
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 cd ${SCRIPT_DIR}
 
+if [ "$1" = "y" ]
+ then
+        echo "Direct mode"
+ else
 read -p "This will add cron job to backup datbase and run regular maintanance script, Do you want to proceed? (yes/no) " yn
 
 case $yn in 
@@ -13,6 +17,7 @@ case $yn in
         * ) echo invalid response;
                 exit 1;;
 esac
+fi
 
 echo "Setting cron jobs for database backup.."
 sudo chmod +x ${SCRIPT_DIR}/data/db_backup.sh
