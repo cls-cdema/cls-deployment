@@ -98,7 +98,7 @@ echo "Please contact admin to enable following ssh deployment key at repository 
    cat $SSHKEY
 #echo 'update .env file before proceeding to next step.'
 
-if [ "$1" = "compllete" ]
+if [ "$1" = "complete" ]
  then
  echo "Complete Mode.."
  ${SCRIPT_DIR}/2.configure_project.sh
