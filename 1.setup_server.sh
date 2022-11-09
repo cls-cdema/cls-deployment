@@ -19,7 +19,6 @@ if [ "$1" = "update" ]
  echo "Update mode.."
  else
 read -p "Do you want to proceed? (yes/no) " yn
-
 case $yn in 
 	yes ) echo env confirmed;;
 	no ) echo exiting...;
@@ -98,3 +97,11 @@ echo "Please contact admin to enable following ssh deployment key at repository 
    echo "After setting up deployment key, you can proceed to next setp 2.configure_project."
    cat $SSHKEY
 #echo 'update .env file before proceeding to next step.'
+
+if [ "$1" = "compllete" ]
+ then
+ echo "Complete Mode.."
+ ${SCRIPT_DIR}/2.configure_project.sh
+ ${SCRIPT_DIR}/3.configure_ssl.sh
+ ${SCRIPT_DIR}/4.setup_cron_job_backup_maintanance.sh
+fi
