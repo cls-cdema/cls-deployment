@@ -95,15 +95,17 @@ echo ""
 #echo 'Please proceed to next step to configure the project'
 fi
 
-#upload_max_filesize=240M
-#post_max_size=50M
-#max_execution_time=100
-#max_input_time=223
+echo 'Setting Default PHP INI settings..'
+INI_LOC=$(php -i|sed -n '/^Loaded Configuration File => /{s:^.*> ::;p;q}')
+upload_max_filesize=400M
+post_max_size=200M
+max_execution_time=3000
+max_input_time=5000
 
-#for key in upload_max_filesize post_max_size max_execution_time max_input_time
-#do
-# sed -i "s/^\($key\).*/\1 $(eval echo = \${$key})/" php.ini
-#done
+for key in upload_max_filesize post_max_size max_execution_time max_input_time
+do
+sed -i "s/^\($key\).*/\1 $(eval echo = \${$key})/" ${INI_LOC}
+done
 
 echo "Please contact admin to enable following ssh deployment key at repository ${repo} if not setup."
    echo "After setting up deployment key, you can proceed to next setp 2.configure_project."
