@@ -46,6 +46,7 @@ cp ./.env.example ./.env
 echo "Updating environment variables for laravel..."
 sed -i "s/__DOMAIN__/${domain}/g" /var/www/${domain}/.env
 sed -i "s/__DB__/${db}/g" /var/www/${domain}/.env
+sed -i "s/__DBHOST__/${db_host}/g" /var/www/${domain}/.env
 sed -i "s/__USER__/${user}/g" /var/www/${domain}/.env
 sed -i "s/__PASS__/${pass}/g" /var/www/${domain}/.env
 

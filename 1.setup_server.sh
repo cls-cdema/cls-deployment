@@ -68,6 +68,7 @@ sudo apt install python3-certbot-apache -y
 echo "Setting up environment variables in ./data/db.sql..."
 sed -i "s/__DOMAIN__/${domain}/g" ./data/db.sql
 sed -i "s/__DB__/${db}/g" ./data/db.sql
+#sed -i "s/__DBHOST__/${db_host}/g" ./data/db.sql
 sed -i "s/__USER__/${user}/g" ./data/db.sql
 sed -i "s/__PASS__/${pass}/g" ./data/db.sql
 
@@ -93,6 +94,17 @@ fi
 echo ""
 #echo 'Please proceed to next step to configure the project'
 fi
+
+#upload_max_filesize=240M
+#post_max_size=50M
+#max_execution_time=100
+#max_input_time=223
+
+#for key in upload_max_filesize post_max_size max_execution_time max_input_time
+#do
+# sed -i "s/^\($key\).*/\1 $(eval echo = \${$key})/" php.ini
+#done
+
 echo "Please contact admin to enable following ssh deployment key at repository ${repo} if not setup."
    echo "After setting up deployment key, you can proceed to next setp 2.configure_project."
    cat $SSHKEY

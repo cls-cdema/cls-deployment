@@ -12,5 +12,5 @@ export MYSQL_PWD=${pass};
 mysqldump -u${user} --no-tablespaces --databases ${db} > "${FILENAME}.sql"
 gzip -9  "${FILENAME}.sql"
 
-#mv "/tmp/${FILENAME}.sql.gz" ${backups}
+mv "/tmp/${FILENAME}.sql.gz" ${backups}
 #tar -czf ${backups}/files_${FILENAME}.tar.gz /var/www/${domain}/public/upload/srf /var/www/${domain}/public/upload/location /var/www/${domain}/public/upload/libary

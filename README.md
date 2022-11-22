@@ -10,7 +10,9 @@
 
 1. Clone repository and set permissions for setup script. each setup script can be checked against a text editor before setting permissions.
 
-> cd ~ git clone [https://github.com/cls-cdema/cls-deployment](mailto:https://github.com/cls-cdema/cls-deployment)
+> cd ~ 
+
+> git clone [https://github.com/cls-cdema/cls-deployment](mailto:https://github.com/cls-cdema/cls-deployment)
 
 > cd cls-deployment
 
@@ -33,6 +35,8 @@
 > contact=[USEREMAIL@MAILPROVIDER.TLD]
 
 > db=cls_cdema_org
+
+> db_host=127.0.0.1
 
 > user=cls
 
