@@ -24,6 +24,7 @@ then
 	echo "found repo.."
     if [ "$1" = "reset" ]
     then
+        echo "project reset mode"
         echo "cleaning existing site..."
         sudo rm -R /var/www/${domain}
         git clone -b ${branch} ${repo} ${domain}

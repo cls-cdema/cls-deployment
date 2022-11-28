@@ -42,6 +42,7 @@ echo "Installing Apache Web Server.."
 sudo apt install git apache2 -y
 echo "Allowing Web server ports in Firewall..."
 sudo ufw allow 'Apache Full'
+sudo ufw reload
 
 echo "Installing MySql Database Server..."
 sudo apt install mysql-server -y

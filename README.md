@@ -175,12 +175,18 @@ This shell script will setup the following:
 
 # CLS Phase 1: Cron Jobs for database backup and maintanance
  
-1. Run 4.setup_cron_job_backup_maintanance.sh file to register cron job to run database backup script  every 6 Hours daily and to run maintanance script weekly.
+1. Run **4.setup_cron_job_backup_maintanance.sh** file to register cron job to run database backup script  every 6 Hours daily and to run maintanance script weekly.
 
 
 # CLS Phase 1: Cron Jobs for server update
  
-1. Run 5.setup_cron_job_server_update.sh file to register cron job to run maintanance script yearly.
+1. Run **5.setup_cron_job_server_update.sh** file to register cron job to run maintanance script yearly.
+
+
+# CLS Phase 1: Set up Traccar Server
+ 
+1. Update **traccar_installer** variable and **traccar_server** variable in .env file.
+2. Run **6.setup_traccar_server.sh** file to download traccar server installer. (This is optional feature, Traccar server can also be setup on other server.)
 
 # CLS Phase 1: Complete All in One install 
 1. Run shell script file **1\.setup_server.sh** file with "complete" argument. There may be several user confirmations during setup process. If system asks to restart services for outdated kernel/ services, all need to be selected.
