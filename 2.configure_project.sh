@@ -4,6 +4,16 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 cd ${SCRIPT_DIR}
 source ${SCRIPT_DIR}/.env
 
+echo "Setting up environment variables in ./data/db.sql..."
+sed -i "s/__DOMAIN__/${domain}/g" ./data/db.sql
+sed -i "s/__DB__/${db}/g" ./data/db.sql
+#sed -i "s/__DBHOST__/${db_host}/g" ./data/db.sql
+sed -i "s/__USER__/${user}/g" ./data/db.sql
+sed -i "s/__PASS__/${pass}/g" ./data/db.sql
+
+echo "Preparing MySQL Database and User..."
+sudo mysql < ./data/db.sql
+
 sudo a2dissite ${domain}
 sudo chown -R www-data: /var/www/
 sudo apt-get install -y acl
@@ -86,7 +96,13 @@ if [ -d /var/www/${domain}/public/temp ]
 then
 echo "temporary folder exists."
 else
-sudo mkdir /var/www/${domain}/public/temp
+sudo mkdir /var/www/${domain}/public/upload/temp
+fi
+if [ -d /var/www/${domain}/public/upload/temp ]
+then
+echo "temporary folder exists."
+else
+sudo mkdir /var/www/${domain}/public/upload/temp
 fi
 if [ -d /var/www/${domain}/public/upload/library ]
 then

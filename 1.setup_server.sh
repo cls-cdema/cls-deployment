@@ -57,24 +57,16 @@ if [ "$1" = "update" ]
 ssh-keyscan github.com >>~/.ssh/known_hosts
 
 sudo a2dissite 000-default
-echo "Enabling Apache Mod Rewrite..."
-sudo a2enmod rewrite
+echo "Enabling Apache Mods..."
+#sudo a2enmod rewrite
+sudo a2enmod ssl proxy_http proxy_wstunnel rewrite
+
 #sudo apt install composer -y
 echo "Installing curl and Composer V2..."
 sudo apt install curl
 sudo curl -s https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/bin/composer
 sudo apt install python3-certbot-apache -y
-
-echo "Setting up environment variables in ./data/db.sql..."
-sed -i "s/__DOMAIN__/${domain}/g" ./data/db.sql
-sed -i "s/__DB__/${db}/g" ./data/db.sql
-#sed -i "s/__DBHOST__/${db_host}/g" ./data/db.sql
-sed -i "s/__USER__/${user}/g" ./data/db.sql
-sed -i "s/__PASS__/${pass}/g" ./data/db.sql
-
-echo "Preparing MySQL Database and User..."
-sudo mysql < ./data/db.sql
 
 echo "Checking SSH key..."
 SSHKEY=~/.ssh/id_rsa.pub
