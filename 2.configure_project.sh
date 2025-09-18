@@ -3,6 +3,11 @@
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 cd ${SCRIPT_DIR}
 source ${SCRIPT_DIR}/.env
+source ${SCRIPT_DIR}/utils/ssh_utils.sh
+source ${SCRIPT_DIR}/utils/env_utils.sh
+
+# Validate required environment variables
+validate_env_vars "domain" "db" "db_host" "user" "pass" "repo" "branch"
 
 echo "Setting up environment variables in ./data/db.sql..."
 sed -i "s/__DOMAIN__/${domain}/g" ./data/db.sql
@@ -26,7 +31,7 @@ else
 fi
 
 cd /var/www
-ssh-keyscan github.com >>~/.ssh/known_hosts
+setup_github_known_hosts
 
 Directory=/var/www/${domain}
 if [ -d "$Directory" ]
@@ -42,9 +47,9 @@ then
     else
         cd ${domain}
         echo "Updating latest repository..."
-        git stash && git pull origin ${branch}eeee
+        git stash && git pull origin ${branch}
     fi
-   
+
 else
     echo "Cloning Git repository into branch ${branch}..."
     git clone -b ${branch} ${repo} ${domain}
@@ -53,17 +58,39 @@ fi
 
 cd ${domain}
 
+# Backup original .env.example if it exists
+if [ -f "./.env.example" ]; then
+    backup_env_file "./.env.example"
+fi
+
 cp ./.env.example ./.env
 echo "Updating environment variables for laravel..."
-sed -i "s/__DOMAIN__/${domain}/g" /var/www/${domain}/.env
-sed -i "s/__DB__/${db}/g" /var/www/${domain}/.env
-sed -i "s/__DBHOST__/${db_host}/g" /var/www/${domain}/.env
-sed -i "s/__USER__/${user}/g" /var/www/${domain}/.env
-sed -i "s/__PASS__/${pass}/g" /var/www/${domain}/.env
+
+# Update Laravel .env file with deployment variables
+update_env_file "/var/www/${domain}/.env" \
+    "DOMAIN" "${domain}" \
+    "DB" "${db}" \
+    "DBHOST" "${db_host}" \
+    "USER" "${user}" \
+    "PASS" "${pass}"
+
+# Verify all placeholders were replaced
+check_placeholders_replaced "/var/www/${domain}/.env"
 
 echo "Updating environment variables apache configuration..."
-sudo sed -i "s/__DOMAIN__/${domain}/g" /etc/apache2/sites-available/${domain}.conf
-sudo sed -i "s/__CONTACT__/${contact}/g" /etc/apache2/sites-available/${domain}.conf
+# Update Apache configuration with proper error handling
+if [ -f "/etc/apache2/sites-available/${domain}.conf" ]; then
+    sudo cp "/etc/apache2/sites-available/${domain}.conf" "/etc/apache2/sites-available/${domain}.conf.bak"
+
+    # Use the utility function for safer replacement
+    sudo bash -c "
+        source ${SCRIPT_DIR}/utils/env_utils.sh
+        replace_env_var 'DOMAIN' '${domain}' '/etc/apache2/sites-available/${domain}.conf'
+        replace_env_var 'CONTACT' '${contact}' '/etc/apache2/sites-available/${domain}.conf'
+    "
+else
+    echo "Warning: Apache configuration file not found at /etc/apache2/sites-available/${domain}.conf"
+fi
 
 echo "Enabling domain ${domain} in Apache configuration..."
 sudo a2ensite ${domain}
@@ -146,7 +173,7 @@ if [ "$1" = "reset" ]
     php artisan passport:install --force
     echo 'Running Initial Queries..'
     sudo mysql ${db} < /var/www/${domain}/database/sqls/seed.sql
-else 
+else
     php artisan migrate
     if [ "$1" = "" ]
     then
