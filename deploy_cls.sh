@@ -304,6 +304,9 @@ step_install_services() {
         return 0
     fi
     
+    print_status "installing unzip.."
+    run_with_sudo apt install -y unzip
+
     print_status "Installing Apache web server..."
     run_with_sudo apt install -y apache2
     
