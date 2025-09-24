@@ -1,209 +1,213 @@
-# CLS Phase 1: Fresh Installation
+## 🚀 Deployment Scripts
 
-  **Prerequisite** 
-  
+This repository contains two main deployment scripts for the CLS Laravel project, designed for Ubuntu 22.04 and 24.04.
 
- - To install CLS, Linux server must be setup with distro Ubuntu 20.04 LTS or 22.04 LTS.
- - External firewall must be configure to allow access SSH port 22 and Web server port 80 and 443.
+1.  `deploy_cls.sh`: For traditional "bare-metal" deployments using Apache and MySQL directly on the host.
+2.  `deploy_docker.sh`: For containerized deployments using Docker and Docker Compose.
 
+### Key Improvements
 
+- **Interactive Menus**: Both scripts provide user-friendly menus for step-by-step execution.
+- **Dynamic SSH Key Detection**: Automatically detects existing SSH keys.
+- **User-Friendly Execution**: Works with both `root` and regular users (uses `sudo` when needed).
+- **Ubuntu 22.04/24.04 Compatible**: Tested and optimized for both Ubuntu versions.
+- **Comprehensive Error Handling**: Better error messages and validation.
+- **Colored Output**: Easy-to-read status messages with color coding.
 
-1. Clone repository and set permissions for setup script. each setup script can be checked against a text editor before setting permissions.
+## 📋 Prerequisites
 
-> cd ~ 
+- Ubuntu 22.04 or 24.04
+- Internet connection
+- Git repository access
+- Domain name configured (for SSL setup)
 
-> git clone [https://github.com/cls-cdema/cls-deployment](mailto:https://github.com/cls-cdema/cls-deployment)
+## ⚙️ Configuration
 
-> cd cls-deployment
+Both scripts use a shared `.env` file for configuration.
 
-> cp .env.example .env
+1.  **Create your environment configuration**:
+    ```bash
+    cp .env.example .env
+    nano .env # Edit with your configuration
+    ```
+2.  **Make the scripts executable**:
+    ```bash
+    chmod +x deploy_cls.sh
+    chmod +x deploy_docker.sh
+    ```
 
-> sudo chmod +x *.sh
+The `.env` file contains settings for domain, database, Git repository, and more.
 
-  
+```bash
+# Domain configuration
+domain=your-domain.com
+contact=admin@your-domain.com
 
-2. Update deployment .env file. Deployment .env file contains the configuration for the primary domain and contact email of deployment server and database password for database user account to be generated. following are default .env contents.
+# Database configuration
+db=cls_database
+user=cls_user
+pass=your_secure_password
+db_host=localhost
 
-  
+# Git repository configuration
+repo=https://github.com/your-org/your-repo.git
+branch=main
 
-> repo=https://github.com/cls-cdema/cls-deployment.git
+# Traccar configuration (optional)
+traccar_installer=https://github.com/traccar/traccar/releases/download/v5.8/traccar-linux-5.8.zip
+```
 
-> branch=master
+## 🎯 Deployment Methods
 
-> domain=cls-cdema.org
+### 1. Normal Deployment (`deploy_cls.sh`)
 
-> contact=[USEREMAIL@MAILPROVIDER.TLD]
+This script sets up the entire environment on the host machine.
 
-> db=cls_cdema_org
+**Usage:**
 
-> db_host=127.0.0.1
+```bash
+./deploy_cls.sh
+```
 
-> user=cls
+**Features:**
 
-> pass=somedbpassword
+- Installs Apache, MySQL, PHP, and other dependencies.
+- Configures the database and Apache virtual host.
+- Clones the project from your Git repository.
+- Sets up Laravel, including migrations and key generation.
+- Configures SSL using Let's Encrypt.
+- Sets up cron jobs for backups and maintenance.
+- Optionally installs Traccar server.
 
+### 2. Docker Deployment (`deploy_docker.sh`)
 
-3. Run shell script file **1\.setup_server.sh** file. There may be several user confirmations during setup process. If system asks to restart services for outdated kernel/ services, 'select all' must be selected.
+This script automates the setup and management of a containerized CLS environment.
 
-  
+**Usage:**
 
->  ./1.setup_server.sh
+```bash
+./deploy_docker.sh
+```
 
-  
+**Features:**
 
-This shell script will initiate the following:
+- **Automated Setup**: Installs Docker and Docker Compose, sets up SSH keys, and clones the project.
+- **Environment Configuration**: Configures all necessary `.env` files for the Docker setup.
+- **Multi-Profile Deployment**: Supports different deployment profiles:
+  - `development`: Includes Mailhog for email testing.
+  - `production`: Sets up an Nginx reverse proxy with SSL.
+  - `traccar`: Includes the Traccar GPS service.
+  - `basic`: A minimal setup with the application, database, and Redis.
+- **Service Management**: Provides commands to `start`, `stop`, `restart`, `update`, and view `logs` for your Docker containers.
+
+## 🔧 Usage Options
+
+### Interactive Mode
+```bash
+./deploy_cls.sh
+# or
+./deploy_docker.sh
+```
+- Shows a menu to select individual steps.
+- Allows running all steps at once or skipping to a specific step.
+- Provides confirmation prompts before executing critical actions.
 
-- Installing Apache Web server
+### Run All Steps
+```bash
+./deploy_cls.sh
+# Select option 'a' for all steps
+```
 
-- Installing PHP and required extensions
+### Update Mode
+```bash
+./deploy_cls.sh update
+```
+- Runs only system updates (useful for cron jobs)
 
-- Installing Mysql database server
+## 🔑 SSH Key Management
 
-- Installing Composer
+The script automatically handles SSH key detection and generation:
 
-- Installing Apache Certbot
+- **Detects existing keys**: Looks for `id_rsa.pub`, `id_ed25519.pub`, `id_ecdsa.pub`, or any `.pub` file
+- **Generates new keys**: Creates `id_ed25519` key if none found
+- **Shows public key**: Displays the public key for adding to GitHub/GitLab
+- **Validates setup**: Confirms key is added to repository
 
-- Creating database and database user. Database name and database password must be the same as defined in deployment .env file.
+## 👤 User Permissions
 
-- Generating SSH key if not already exists.
+The script works with both root and regular users:
 
-  
+- **Root user**: Runs commands directly
+- **Regular user**: Uses `sudo` for system operations
+- **File permissions**: Properly sets ownership and permissions
+- **ACL support**: Uses Access Control Lists for proper file access
 
-4. Configure the deployment key - Copy the public key from the open terminal window and setup deployment key in cls main repository.
+## 🛡️ Security Features
 
-  
+- **Non-interactive mode**: Uses `DEBIAN_FRONTEND=noninteractive` for automated updates
+- **Secure file permissions**: Sets appropriate permissions for sensitive files
+- **Firewall configuration**: Configures UFW firewall rules
+- **SSL/TLS support**: Automatic Let's Encrypt certificate setup
 
-5. Run the shell script file **2\.configure_project.sh** to configure the following:
+## 📁 Directory Structure
 
-- Cloning CLS project repository from github.
+```
+cls-deployment2/
+├── deploy_cls.sh              # Main interactive deployment script
+├── .env.example              # Environment configuration template
+├── .env                      # Your environment configuration (create this)
+├── data/
+│   ├── 000-default.conf      # Apache virtual host template
+│   ├── db.sql               # Database setup script
+│   ├── db_backup.sh         # Database backup script
+│   └── maintanance.sh       # Maintenance script
+└── README.md                # This file
+```
 
-- Setting up a new project with the provided domain name in deployment .env file.
+## 🔄 Legacy Scripts
 
-- Setting up the default directories.
+The original numbered scripts are still available for reference:
+- `1.setup_server.sh` - Original server setup
+- `2.configure_project.sh` - Original project configuration
+- `3.configure_ssl.sh` - Original SSL setup
+- `4.setup_cron_job_backup_maintanance.sh` - Original backup cron
+- `5.setup_cron_job_server_update.sh` - Original update cron
+- `6.setup_traccar_server.sh` - Original Traccar setup
 
-- Setting correct directory permission.
+## 🐛 Troubleshooting
 
-- Updating composer libraries.
+### Common Issues
 
-- Initial migration of database.
+1. **Permission Denied**: Ensure the script is executable (`chmod +x deploy_cls.sh`)
+2. **SSH Key Issues**: The script will guide you through SSH key setup
+3. **Database Connection**: Verify database credentials in `.env` file
+4. **Domain Resolution**: Ensure DNS is configured before SSL setup
 
-- Initial data seeding.
+### Logs and Debugging
 
-- Generating passport authentication keys.
+- Check Apache logs: `/var/log/apache2/`
+- Check MySQL logs: `/var/log/mysql/`
+- Check system logs: `journalctl -u apache2` or `journalctl -u mysql`
 
-  
+## 📞 Support
 
->  ./2.configure_project.sh
+For issues or questions:
+1. Check the troubleshooting section above
+2. Verify your `.env` configuration
+3. Ensure all prerequisites are met
+4. Check system logs for specific error messages
 
-  
+## 🔄 Updates
 
-5. generate an SSL certificate by runing the following shell script which will setup an SSL certificate from Lets Encrypt (https://letsencrypt.org) using the domain name from .env file. Before running this step, deployment server's IP address must be pointed as A or AA record from domain control panel.
+The script includes automatic update functionality:
+- System updates run via cron job (yearly)
+- Database backups run every 6 hours
+- Maintenance runs weekly
 
-  
+## 📝 License
 
->  ./3._configure_ssl.sh
+This deployment script is part of the CLS project. Please refer to the main project license for usage terms.
 
-  
+---
 
-# CLS Phase 1: Updating Servers
-
-  
-
-1. Run shell script file **1\.setup_server.sh** file with "update" argument. There may be several user confirmations during setup process. If system asks to restart services for outdated kernel/ services, all need to be selected.
-
-  
-
->  ./1.setup_server.sh update
-
-  
-
-This shell script will setup the following:
-
-- Updating Apahe Web server.
-
-- Updating PHP and required extensions.
-
-- Updating Mysql database server.
-
-  
-
-2. Run the shell script file **2\.configure_project.sh** with "update" argument. to configure following settings.
-
-- Pulling last commit of project from github repo.
-
-- Updating composer libraries.
-
-- Migrating of database changes.
-
-  
-
->  ./2.configure_project.sh update
-
-  
-
-# CLS Phase 1: Resetting project only
-
-  
-
-1. Run the shell script file **2\.configure_project.sh** with "reset" argument. to configure following settings.
-
-- Removing existing project files.
-
-- Cloning CLS project repository from github.
-
-- Setting up the project with the provided domain name in deployment .env file.
-
-- Setting up the default directories.
-
-- Setting correct directory permission.
-
-- Updating composer libraries.
-
-- Dropping existing database.
-
-- Initial migration of database.
-
-- Initial data seeding.
-
-- Generating passport authentication keys.
-
-  
-
->  ./2.configure_project.sh reset
-
- 
-
-# CLS Phase 1: Cron Jobs for database backup and maintanance
- 
-1. Run **4.setup_cron_job_backup_maintanance.sh** file to register cron job to run database backup script  every 6 Hours daily and to run maintanance script weekly.
-
-
-# CLS Phase 1: Cron Jobs for server update
- 
-1. Run **5.setup_cron_job_server_update.sh** file to register cron job to run maintanance script yearly.
-
-
-# CLS Phase 1: Set up Traccar Server
- 
-1. Update **traccar_installer** variable and **traccar_server** variable in .env file.
-2. Run **6.setup_traccar_server.sh** file to download traccar server installer. (This is optional feature, Traccar server can also be setup on other server.)
-
-# CLS Phase 1: Complete All in One install 
-1. Run shell script file **1\.setup_server.sh** file with "complete" argument. There may be several user confirmations during setup process. If system asks to restart services for outdated kernel/ services, all need to be selected.
-2. This will install 4 step sequencially
- 
-		1.setup_server.sh
-		2.configure_project.sh
-		3._configure_ssl.sh
-		4.setup_cron_job_backup_maintanance.sh
-		
-	
-4. It is very import to be ready to  have following main points to run in complete mode
-	1. .env is ready
-	2.  SSH key is arelay imported as deployed key
-	3. domain is correctly configured to point to server ip.
-  
-
->  ./1.setup_server.sh complete
-
-  
+**Note**: Always backup your data before running deployment scripts in production environments.
