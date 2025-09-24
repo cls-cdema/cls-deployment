@@ -232,7 +232,6 @@ show_normal_menu() {
     echo "  10) Install Traccar server"
     echo "  a) Run all steps"
     echo "  s) Skip to specific step"
-    echo "  b) Back to main menu"
     echo "  q) Quit"
     echo ""
 }
@@ -331,6 +330,40 @@ step_install_services() {
     print_status "Enabling Apache modules..."
     run_with_sudo a2enmod ssl proxy_http proxy_wstunnel rewrite
     run_with_sudo a2dissite 000-default
+
+    echo 'Setting Default PHP INI settings..'
+INI_LOC=$(php -i 2>/dev/null | sed -n '/^Loaded Configuration File => /{s:^.*> ::;p;q}')
+
+if [ -n "$INI_LOC" ] && [ -f "$INI_LOC" ]; then
+    echo "Found PHP INI at: $INI_LOC"
+
+    # Backup original
+    if is_root_user; then
+        cp "$INI_LOC" "${INI_LOC}.backup"
+    else
+        sudo cp "$INI_LOC" "${INI_LOC}.backup"
+    fi
+
+    # Set PHP configuration values
+    declare -A php_settings=(
+        ["upload_max_filesize"]="400M"
+        ["post_max_size"]="200M"
+        ["max_execution_time"]="3000"
+        ["max_input_time"]="5000"
+        ["memory_limit"]="512M"
+    )
+
+    for key in "${!php_settings[@]}"; do
+        value="${php_settings[$key]}"
+        echo "Setting $key = $value"
+            sudo sed -i "s/^\($key\s*=\).*/\1 $value/" "$INI_LOC"
+        
+    done
+
+    echo "✓ PHP configuration updated"
+else
+    echo "Warning: Could not find PHP INI file"
+fi
     
     print_status "Service installation completed!"
 }
