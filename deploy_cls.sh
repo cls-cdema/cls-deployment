@@ -331,38 +331,113 @@ step_install_services() {
     run_with_sudo a2enmod ssl proxy_http proxy_wstunnel rewrite
     run_with_sudo a2dissite 000-default
 
-    echo 'Setting Default PHP INI settings..'
-INI_LOC=$(php -i 2>/dev/null | sed -n '/^Loaded Configuration File => /{s:^.*> ::;p;q}')
+    echo 'Setting Default PHP INI settings...'
 
-if [ -n "$INI_LOC" ] && [ -f "$INI_LOC" ]; then
-    echo "Found PHP INI at: $INI_LOC"
-
-    # Backup original
-    if is_root_user; then
-        cp "$INI_LOC" "${INI_LOC}.backup"
-    else
-        sudo cp "$INI_LOC" "${INI_LOC}.backup"
+# Function to detect Apache php.ini path
+get_apache_php_ini() {
+    # Get PHP version (e.g., 8.1, 8.3)
+    local php_version
+    php_version=$(php -v 2>/dev/null | head -n1 | cut -d' ' -f2 | cut -d'.' -f1,2)
+    if [ -z "$php_version" ]; then
+        echo "Error: Could not determine PHP version" >&2
+        return 1
     fi
 
-    # Set PHP configuration values
-    declare -A php_settings=(
-        ["upload_max_filesize"]="400M"
-        ["post_max_size"]="200M"
-        ["max_execution_time"]="3000"
-        ["max_input_time"]="5000"
-        ["memory_limit"]="512M"
-    )
+    # Construct Apache php.ini path
+    local ini_path="/etc/php/$php_version/apache2/php.ini"
+    if [ -f "$ini_path" ]; then
+        echo "$ini_path"
+        return 0
+    else
+        echo "Error: Apache php.ini not found at $ini_path" >&2
+        return 1
+    fi
+}
+# Get Apache php.ini path
+INI_LOC=$(get_apache_php_ini)
+if [ $? -ne 0 ] || [ -z "$INI_LOC" ]; then
+    echo "Warning: Could not find Apache PHP INI file"
+    exit 1
+fi
 
-    for key in "${!php_settings[@]}"; do
-        value="${php_settings[$key]}"
-        echo "Setting $key = $value"
-            sudo sed -i "s/^\($key\s*=\).*/\1 $value/" "$INI_LOC"
-        
-    done
+echo "Found PHP INI at: $INI_LOC"
 
-    echo "✓ PHP configuration updated"
+# Backup original php.ini with timestamp to avoid overwriting
+timestamp=$(date +%Y%m%d_%H%M%S)
+backup_path="${INI_LOC}.${timestamp}.backup"
+if sudo cp "$INI_LOC" "$backup_path" 2>/dev/null; then
+    echo "Created backup at: $backup_path"
 else
-    echo "Warning: Could not find PHP INI file"
+    echo "Error: Failed to create backup of $INI_LOC" >&2
+    exit 1
+fi
+
+# Set PHP configuration values
+declare -A php_settings=(
+    ["upload_max_filesize"]="400M"
+    ["post_max_size"]="200M"
+    ["max_execution_time"]="3000"
+    ["max_input_time"]="5000"
+    ["memory_limit"]="512M"
+)
+
+# Function to update or add PHP setting
+update_php_setting() {
+    local key="$1"
+    local value="$2"
+    local file="$3"
+
+    # Check if the setting exists (uncommented)
+    if grep -q "^\s*$key\s*=" "$file"; then
+        # Update existing setting
+        if sudo sed -i "s/^\s*\($key\s*=\s*\).*/\1$value/" "$file"; then
+            echo "Updated $key = $value"
+        else
+            echo "Error: Failed to update $key in $file" >&2
+            return 1
+        fi
+    else
+        # Check if the setting is commented out
+        if grep -q "^\s*;\s*$key\s*=" "$file"; then
+            # Uncomment and update
+            if sudo sed -i "s/^\s*;\s*\($key\s*=\s*\).*/\1$value/" "$file"; then
+                echo "Uncommented and updated $key = $value"
+            else
+                echo "Error: Failed to update commented $key in $file" >&2
+                return 1
+            fi
+        else
+            # Add new setting at the end of the file
+            if echo "$key = $value" | sudo tee -a "$file" >/dev/null; then
+                echo "Added $key = $value"
+            else
+                echo "Error: Failed to add $key to $file" >&2
+                return 1
+            fi
+        fi
+    fi
+}
+
+# Update each PHP setting
+for key in "${!php_settings[@]}"; do
+    value="${php_settings[$key]}"
+    echo "Setting $key = $value"
+    update_php_setting "$key" "$value" "$INI_LOC" || {
+        echo "Warning: Failed to set $key, continuing with other settings" >&2
+    }
+done
+
+# Verify Apache needs restarting
+echo "Checking if Apache needs restarting..."
+if command -v apache2ctl >/dev/null 2>&1; then
+    if sudo apache2ctl -t >/dev/null 2>&1; then
+        echo "✓ PHP configuration updated. Restart Apache to apply changes (e.g., 'sudo systemctl restart apache2')."
+    else
+        echo "Error: Apache configuration test failed. Please check Apache setup." >&2
+        exit 1
+    fi
+else
+    echo "Warning: Apache not found. Please manually restart your web server to apply changes." >&2
 fi
     
     print_status "Service installation completed!"
@@ -381,22 +456,36 @@ step_setup_ssh() {
     print_status "Adding GitHub to known hosts..."
     ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null || true
     
+    # Ensure ~/.ssh directory exists with correct permissions
+    mkdir -p ~/.ssh
+    chmod 700 ~/.ssh
+    
     # Detect existing SSH key
     local ssh_key
     if ssh_key=$(detect_ssh_key); then
         print_status "Found existing SSH key: $ssh_key"
         echo ""
         print_status "Your public SSH key:"
-        cat "$ssh_key"
+        cat "$ssh_key" 2>/dev/null || {
+            print_error "Failed to read public key at $ssh_key"
+            return 1
+        }
         echo ""
         print_warning "Please add this key to your GitHub repository deployment keys if not already done."
     else
         print_status "No SSH key found. Generating new key..."
         ssh_key=$(generate_ssh_key)
+        if [ $? -ne 0 ]; then
+            print_error "SSH key generation failed"
+            return 1
+        fi
         print_status "Generated new SSH key: $ssh_key"
         echo ""
         print_status "Your public SSH key:"
-        cat "$ssh_key"
+        cat "$ssh_key" 2>/dev/null || {
+            print_error "Failed to read public key at $ssh_key"
+            return 1
+        }
         echo ""
         print_warning "Please add this key to your GitHub repository deployment keys."
     fi
@@ -405,6 +494,9 @@ step_setup_ssh() {
         print_warning "Please add the SSH key to your repository and run this step again."
         return 1
     fi
+    
+    # Set correct permissions for the private key
+    chmod 600 "${ssh_key%.pub}" 2>/dev/null || true
     
     print_status "SSH setup completed!"
 }
@@ -583,6 +675,8 @@ step_setup_ssl() {
 }
 
 # Step 7: Setup backup and maintenance cron jobs
+#!/bin/bash
+
 step_setup_backup_cron() {
     print_step "Setting up backup and maintenance cron jobs..."
     
@@ -591,17 +685,85 @@ step_setup_backup_cron() {
         return 0
     fi
     
+    # Validate SCRIPT_DIR
+    if [ -z "$SCRIPT_DIR" ]; then
+        print_error "SCRIPT_DIR is not set. Please define the script directory."
+        return 1
+    fi
+    
+    # Define script paths
+    local backup_script="${SCRIPT_DIR}/data/db_backup.sh"
+    local maintenance_script="${SCRIPT_DIR}/data/maintanance.sh"
+    local log_dir="${SCRIPT_DIR}/logs"
+    local backup_log="${log_dir}/db_backup.log"
+    local maintenance_log="${log_dir}/maintanance.log"
+    
+    # Create log directory if it doesn't exist
+    mkdir -p "$log_dir" 2>/dev/null || {
+        print_error "Failed to create log directory at $log_dir"
+        return 1
+    }
+    
+    # Validate backup script
     print_status "Setting up database backup script..."
-    chmod +x ${SCRIPT_DIR}/data/db_backup.sh
+    if [ ! -f "$backup_script" ]; then
+        print_error "Backup script not found at $backup_script"
+        return 1
+    fi
+    if ! chmod +x "$backup_script" 2>/dev/null; then
+        print_error "Failed to make $backup_script executable"
+        return 1
+    fi
     
+    # Validate maintenance script
     print_status "Setting up maintenance script..."
-    chmod +x ${SCRIPT_DIR}/data/maintanance.sh
+    if [ ! -f "$maintenance_script" ]; then
+        print_error "Maintenance script not found at $maintenance_script"
+        return 1
+    fi
+    if ! chmod +x "$maintenance_script" 2>/dev/null; then
+        print_error "Failed to make $maintenance_script executable"
+        return 1
+    fi
     
+    # Function to check if a cron job exists
+    cron_job_exists() {
+        local job_pattern="$1"
+        crontab -l 2>/dev/null | grep -F "$job_pattern" >/dev/null
+        return $?
+    }
+    
+    # Add cron jobs only if they don't exist
     print_status "Adding cron jobs..."
-    (crontab -l 2>/dev/null; echo "0 */6 * * * ${SCRIPT_DIR}/data/db_backup.sh >/dev/null 2>&1") | crontab -
-    (crontab -l 2>/dev/null; echo "0 0 * * 0 ${SCRIPT_DIR}/data/maintanance.sh >/dev/null 2>&1") | crontab -
+    
+    # Backup cron job: every 6 hours
+    local backup_cron="0 */6 * * * $backup_script >> $backup_log 2>&1"
+    if cron_job_exists "$backup_script"; then
+        print_status "Backup cron job already exists, skipping..."
+    else
+        if (crontab -l 2>/dev/null; echo "$backup_cron") | crontab -; then
+            print_status "Added backup cron job (every 6 hours)"
+        else
+            print_error "Failed to add backup cron job"
+            return 1
+        fi
+    fi
+    
+    # Maintenance cron job: weekly at midnight on Sunday
+    local maintenance_cron="0 0 * * 0 $maintenance_script >> $maintenance_log 2>&1"
+    if cron_job_exists "$maintenance_script"; then
+        print_status "Maintenance cron job already exists, skipping..."
+    else
+        if (crontab -l 2>/dev/null; echo "$maintenance_cron") | crontab -; then
+            print_status "Added maintenance cron job (weekly on Sunday)"
+        else
+            print_error "Failed to add maintenance cron job"
+            return 1
+        fi
+    fi
     
     print_status "Cron jobs setup completed!"
+    print_status "Logs will be written to $backup_log and $maintenance_log"
 }
 
 # Step 8: Setup server update cron job

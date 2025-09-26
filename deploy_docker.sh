@@ -105,7 +105,7 @@ EOF
     else
         # Fallback: try to generate with empty passphrase
         print_status "Installing expect for SSH key generation..."
-        sudo apt install -y expect >/dev/null 2>&1
+        run_with_sudo apt install -y expect >/dev/null 2>&1
         
         expect >/dev/null 2>&1 << EOF
 spawn ssh-keygen -t ed25519 -f "$ssh_dir/id_ed25519" -C "$(whoami)@$(hostname)"
@@ -338,11 +338,11 @@ create_docker_env() {
 
 # Function to get docker compose command
 get_docker_compose_cmd() {
-    if command_exists docker-compose; then
-        echo "docker-compose"
-    else
+    #if command_exists docker-compose; then
+    #    echo "docker-compose"
+   # else
         echo "docker compose"
-    fi
+    #fi
 }
 
 # Function to deploy docker services
