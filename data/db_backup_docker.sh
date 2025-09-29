@@ -1,19 +1,25 @@
-#!/bin/bash
-
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
-source ${SCRIPT_DIR}/../.env
+PROJECT_DIR=$(dirname "${SCRIPT_DIR}")/cls
+source ${PROJECT_DIR}/.env
 
-FILENAME=${db}_$(date +backup_%H-%M-%d-%m-%Y)
+UNAME=$(date +backup_%H-%M-%d-%m-%Y)
+FILENAME=${CLS_DOMAIN}_${UNAME}
+mkdir /tmp/${FILENAME}
 backups=${SCRIPT_DIR}/backups
 mkdir -p ${backups}
 
 # Backup Database
-export MYSQL_PWD=${pass}
-mysqldump -h${db_host} -u${user} --no-tablespaces --databases ${db} > "/tmp/${FILENAME}.sql"
+IP_HOST=$(docker inspect   -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${DB_HOST})
+#echo ${IP_HOST}
+export MYSQL_PWD=${DB_PASSWORD}
+mysqldump -h${IP_HOST} -u${DB_USERNAME} --no-tablespaces --databases ${DB_DATABASE} > "/tmp/${FILENAME}.sql"
 gzip -9 "/tmp/${FILENAME}.sql"
-mv "/tmp/${FILENAME}.sql.gz" ${backups}
+mv "/tmp/${FILENAME}.sql.gz" /tmp/${FILENAME}/
 
 # Backup Files
-PROJECT_DIR=$(dirname "${SCRIPT_DIR}")/cls
 cd ${PROJECT_DIR}/public/upload
-tar -czf ${backups}/files_${FILENAME}.tar.gz -C srf location
+cp ./srf /tmp/${FILENAME}/ -R
+cp ./location /tmp/${FILENAME}/ -R
+cd /tmp/
+tar -czf ${backups}/files_${FILENAME}.tar.gz ./${FILENAME}
+rm ./${FILENAME} -R
