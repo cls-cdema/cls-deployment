@@ -14,5 +14,6 @@ gzip -9 "/tmp/${FILENAME}.sql"
 mv "/tmp/${FILENAME}.sql.gz" ${backups}
 
 # Backup Files
-PROJECT_DIR=${SCRIPT_DIR}/../cls
-tar -czf ${backups}/files_${FILENAME}.tar.gz -C ${PROJECT_DIR}/public/upload srf location
+PROJECT_DIR=$(dirname "${SCRIPT_DIR}")/cls
+cd ${PROJECT_DIR}/public/upload
+tar -czf ${backups}/files_${FILENAME}.tar.gz -C srf location
