@@ -421,8 +421,41 @@ show_menu() {
     echo "  2) Clone Laravel project"
     echo "  3) Create Docker environment"
     echo "  4) Deploy Docker services"
+    echo "  5) Setup backup cron job"
     echo "  q) Quit"
     echo ""
+}
+
+# Function to setup backup cron job for Docker
+step_setup_backup_cron_docker() {
+    print_step "Setting up backup cron job..."
+
+    if ! confirm_action "Setup backup cron job?"; then
+        print_warning "Skipping backup cron job setup."
+        return 0
+    fi
+
+    local cron_script_path="${SCRIPT_DIR}/data/db_backup_docker.sh"
+    if [ ! -f "$cron_script_path" ]; then
+        print_error "Backup script not found at $cron_script_path"
+        return 1
+    fi
+
+    # Ensure script is executable
+    chmod +x "$cron_script_path"
+
+    # Cron job command
+    local cron_command="0 2 * * * $cron_script_path"
+    local cron_comment="# CLS Docker Backup Job for ${domain}"
+
+    # Add cron job if it doesn't exist
+    if ! (crontab -l 2>/dev/null | grep -qF "$cron_comment"); then
+        print_status "Adding cron job for database and file backup..."
+        (crontab -l 2>/dev/null; echo "$cron_comment"; echo "$cron_command") | crontab -
+        print_status "Cron job added successfully."
+    else
+        print_status "Cron job already exists."
+    fi
 }
 
 # --- Place this at the very end of the script ---
@@ -440,6 +473,7 @@ main() {
             2) clone_project ;;
             3) create_docker_env ;;
             4) deploy_docker_services ;;
+            5) step_setup_backup_cron_docker ;;
             q|Q)
                 print_status "Exiting..."
                 exit 0
