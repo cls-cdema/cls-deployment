@@ -447,10 +447,7 @@ step_setup_ssh() {
     #chmod 600 "${ssh_key%.pub}" 2>/dev/null || true
     
     print_status "SSH setup completed!"
-    if ! confirm_action "Continue?"; then
-        print_status "Skipping..."
-        return 1
-    fi
+    read -p "Press Enter to continue..."
 }
 
 # Step 4: Configure database
