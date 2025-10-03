@@ -82,51 +82,27 @@ detect_ssh_key() {
 
 # Function to generate SSH key if none exists
 generate_ssh_key() {
-    local ssh_dir="$HOME/.ssh"
-    
-    if [ ! -d "$ssh_dir" ]; then
-        mkdir -p "$ssh_dir"
-        chmod 700 "$ssh_dir"
-    fi
-    
-    print_status "Generating new SSH key..."
-    
-    # Check if expect is available for interactive key generation
-    if command_exists expect; then
-        # Use expect for interactive key generation
-        expect >/dev/null 2>&1 << EOF
-spawn ssh-keygen -t ed25519 -f "$ssh_dir/id_ed25519" -C "$(whoami)@$(hostname)"
-expect "Enter passphrase (empty for no passphrase):"
-send "\r"
-expect "Enter same passphrase again:"
-send "\r"
-expect eof
-EOF
-    else
-        # Fallback: try to generate with empty passphrase
-        print_status "Installing expect for SSH key generation..."
-        run_with_sudo apt install -y expect >/dev/null 2>&1
-        
-        expect >/dev/null 2>&1 << EOF
-spawn ssh-keygen -t ed25519 -f "$ssh_dir/id_ed25519" -C "$(whoami)@$(hostname)"
-expect "Enter passphrase (empty for no passphrase):"
-send "\r"
-expect "Enter same passphrase again:"
-send "\r"
-expect eof
-EOF
-    fi
-    
-    # Verify the key was created
-    if [ -f "$ssh_dir/id_ed25519.pub" ]; then
-        print_status "SSH key generated successfully"
-    else
-        print_error "Failed to generate SSH key"
-        return 1
-    fi
-    
-    # Return the generated key file
-    echo "$ssh_dir/id_ed25519.pub"
+    # Check if ~/.ssh directory exists, create if not
+if [ ! -d ~/.ssh ]; then
+    mkdir -p ~/.ssh
+    chmod 700 ~/.ssh
+fi
+
+# Check for existing SSH public keys (id_rsa.pub or *.pub)
+pub_keys=$(ls ~/.ssh/*.pub 2>/dev/null)
+
+if [ -n "$pub_keys" ]; then
+    echo "Existing SSH public key(s) found:"
+    for key in $pub_keys; do
+        echo "Content of $key:"
+        cat "$key"
+        echo ""
+    done
+else
+    echo "No SSH key found, generating new key..."
+    ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N "" -q
+    echo "New SSH public key generated:"
+    cat ~/.ssh/id_rsa.pub
 }
 
 # Function to check environment file
@@ -196,28 +172,8 @@ setup_ssh_keys() {
     
     # Detect existing SSH key
     local ssh_key
-    if ssh_key=$(detect_ssh_key); then
-        print_status "Found existing SSH key: $ssh_key"
-        echo ""
-        print_status "Your public SSH key:"
-        cat "$ssh_key"
-        echo ""
-        print_warning "Please add this key to your GitHub repository deployment keys if not already done."
-    else
-        print_status "No SSH key found. Generating new key..."
-        ssh_key=$(generate_ssh_key)
-        print_status "Generated new SSH key: $ssh_key"
-        echo ""
-        print_status "Your public SSH key:"
-        cat "$ssh_key"
-        echo ""
-        print_warning "Please add this key to your GitHub repository deployment keys."
-    fi
-    
-    if ! confirm_action "Have you added the SSH key to your repository?"; then
-        print_warning "Please add the SSH key to your repository and run this step again."
-        return 1
-    fi
+    generate_ssh_key
+    print_warning "Please add the SSH key to your repository before cloning project."
     
     print_status "SSH setup completed!"
 }
@@ -306,7 +262,7 @@ create_docker_env() {
         sed -i.bak "s/QUEUE_CONNECTION=.*/QUEUE_CONNECTION=redis/g" .env && rm .env.bak
 
         # Update Redis configuration
-        sed -i.bak "s/REDIS_HOST=.*/REDIS_HOST=redis/g" .env && rm .env.bak
+        sed -i.bak "s/REDIS_HOST=.*/REDIS_HOST=127.0.0.1/g" .env && rm .env.bak
         sed -i.bak "s/REDIS_PASSWORD=.*/REDIS_PASSWORD=/g" .env && rm .env.bak
         sed -i.bak "s/REDIS_PORT=.*/REDIS_PORT=6379/g" .env && rm .env.bak
     else
