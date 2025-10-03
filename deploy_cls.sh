@@ -430,22 +430,27 @@ step_setup_ssh() {
     fi
     
     # Add GitHub to known hosts
-    print_status "Adding GitHub to known hosts..."
-    ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null || true
+    #print_status "Adding GitHub to known hosts..."
+    #ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null || true
     
     # Ensure ~/.ssh directory exists with correct permissions
-    mkdir -p ~/.ssh
-    chmod 700 ~/.ssh
+    #mkdir -p ~/.ssh
+    #chmod 700 ~/.ssh
     
     # Detect existing SSH key
-    local ssh_key
-    generate_ssh_key
+    #local ssh_key
+    #generate_ssh_key
+    ./generate-ssh.sh
     print_warning "Please add the SSH key to your repository before cloning project."
     
     # Set correct permissions for the private key
-    chmod 600 "${ssh_key%.pub}" 2>/dev/null || true
+    #chmod 600 "${ssh_key%.pub}" 2>/dev/null || true
     
     print_status "SSH setup completed!"
+    if ! confirm_action "Continue?"; then
+        print_status "Skipping..."
+        return 1
+    fi
 }
 
 # Step 4: Configure database
