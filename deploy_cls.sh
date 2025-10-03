@@ -99,7 +99,7 @@ else
     ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N "" -q
     echo "New SSH public key generated:"
     cat ~/.ssh/id_rsa.pub
-
+fi
 }
 
 # Function to check environment file
