@@ -185,7 +185,7 @@ setup_ssh_keys() {
     #generate_ssh_key
     ./generate-ssh.sh
     print_warning "Please add the SSH key to your repository before cloning project."
-    print_status "${repo}/settings/keys"
+    echo "${repo}/settings/keys" | sed 's#git@github\.com:#https://github.com/#' | sed 's/\.git$//'
     # Set correct permissions for the private key
     #chmod 600 "${ssh_key%.pub}" 2>/dev/null || true
     
