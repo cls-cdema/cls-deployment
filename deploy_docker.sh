@@ -185,12 +185,12 @@ setup_ssh_keys() {
     #generate_ssh_key
     ./generate-ssh.sh
     print_warning "Please add the SSH key to your repository before cloning project."
-    
+    print_status "${repo}/settings/keys"
     # Set correct permissions for the private key
     #chmod 600 "${ssh_key%.pub}" 2>/dev/null || true
     
     print_status "SSH setup completed!"
-    read -p "Press Enter to continue..."
+    #read -p "Press Enter to continue..."
 
 }
 
