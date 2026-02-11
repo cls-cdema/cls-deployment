@@ -1,0 +1,686 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: CLS API Collection
+meta:
+  id: wrk_f90f20f2beab4beaafef89fc96cacd8f
+  created: 1764571721763
+  modified: 1764571721763
+  description: "Complete API collection for CLS application"
+collection:
+  - name: Authentication
+    meta:
+      id: fld_41330d5767564054b24de4ad70f736eb
+      created: 1764934046203
+      modified: 1764934046203
+      sortKey: -1764934046203
+      description: ""
+    children:
+      - url: "{{base_url}}/v1/auth/login"
+        name: Login
+        meta:
+          id: req_de326321d2df4b2ca66c3728edf0e076
+          created: 1764934046205
+          modified: 1764934492619
+          isPrivate: false
+          description: ""
+          sortKey: -1764934046205
+        method: POST
+        body:
+          mimeType: application/json
+          text: '{"email":"user@example.com","password":"password"}'
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/auth/refresh"
+        name: Refresh Token
+        meta:
+          id: req_e3f87e432b1449028797551fbdaa39ff
+          created: 1764934046207
+          modified: 1764934438802
+          isPrivate: false
+          description: ""
+          sortKey: -1764934046207
+        method: POST
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/auth/logout"
+        name: Logout
+        meta:
+          id: req_76e7ffa93c6f42d8825140180413f72d
+          created: 1764934046208
+          modified: 1764934046208
+          isPrivate: false
+          description: ""
+          sortKey: -1764934046208
+        method: POST
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/auth/check"
+        name: Check Auth
+        meta:
+          id: req_622fcafb4f96497daea59477519ff3b5
+          created: 1764934046209
+          modified: 1764934572999
+          isPrivate: false
+          description: ""
+          sortKey: -1764934046209
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Stocks
+    meta:
+      id: fld_stocks_main_group
+      created: 1764934700000
+      modified: 1764934700000
+      sortKey: -1764934700000
+      description: "Stock management endpoints (Auth Required)"
+    children:
+      - url: "{{base_url}}/v1/stocks"
+        name: List Stocks
+        meta:
+          id: req_stocks_list
+          created: 1764934700001
+          modified: 1764934700001
+          isPrivate: false
+          description: ""
+          sortKey: -1764934700001
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/stocks/countries/1,2,3"
+        name: Get Stocks by Countries
+        meta:
+          id: req_stocks_by_countries
+          created: 1764934700002
+          modified: 1764934700002
+          isPrivate: false
+          description: "Get stocks filtered by country IDs"
+          sortKey: -1764934700002
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/stocks/transits"
+        name: Get Stock Transits
+        meta:
+          id: req_stocks_transits
+          created: 1764934700003
+          modified: 1764934700003
+          isPrivate: false
+          description: "Get transit stocks"
+          sortKey: -1764934700003
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/stocks/holdings"
+        name: Get Stock Holdings
+        meta:
+          id: req_stocks_holdings
+          created: 1764934700005
+          modified: 1764934700005
+          isPrivate: false
+          description: "Get stock holdings"
+          sortKey: -1764934700005
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/stocks/exceptions"
+        name: Get Stock Exceptions
+        meta:
+          id: req_stocks_exceptions
+          created: 1764934700008
+          modified: 1764934700008
+          isPrivate: false
+          description: "Get stock exceptions"
+          sortKey: -1764934700008
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/item_units"
+        name: Get Item Units
+        meta:
+          id: req_stocks_item_units
+          created: 1764934700010
+          modified: 1764934700010
+          isPrivate: false
+          description: "Get all item units"
+          sortKey: -1764934700010
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/items"
+        name: Get Items
+        meta:
+          id: req_stocks_items
+          created: 1764934700011
+          modified: 1764934700011
+          isPrivate: false
+          description: "Get all items"
+          sortKey: -1764934700011
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/readjust_stocks"
+        name: Readjust Stocks
+        meta:
+          id: req_stocks_readjust
+          created: 1764934700012
+          modified: 1764934700012
+          isPrivate: false
+          description: "Readjust stock quantities"
+          sortKey: -1764934700012
+        method: POST
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        body:
+          mimeType: application/json
+          text: '{"stock_id":1,"quantity":100,"reason":"Inventory adjustment"}'
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/adjust_stocks"
+        name: Adjust Stocks
+        meta:
+          id: req_stocks_adjust
+          created: 1764934700013
+          modified: 1764934700013
+          isPrivate: false
+          description: "Adjust stock quantities"
+          sortKey: -1764934700013
+        method: POST
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        body:
+          mimeType: application/json
+          text: '{"stock_id":1,"adjustment":10,"type":"increase","notes":"Stock replenishment"}'
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Emergencies
+    meta:
+      id: fld_emergencies_main_group
+      created: 1764934800000
+      modified: 1764934800000
+      sortKey: -1764934800000
+      description: "Emergency management endpoints (Auth Required)"
+    children:
+      - url: "{{base_url}}/v1/emergencies/srf_holds"
+        name: Get SRF Holds
+        meta:
+          id: req_emergencies_srf_holds
+          created: 1764934800001
+          modified: 1764934800001
+          isPrivate: false
+          description: "Get SRF holds by countries"
+          sortKey: -1764934800001
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/srf_holds_no_packages"
+        name: Get SRF Holds (No Packages)
+        meta:
+          id: req_emergencies_srf_holds_no_packages
+          created: 1764934800002
+          modified: 1764934800002
+          isPrivate: false
+          description: "Get SRF holds without packages"
+          sortKey: -1764934800002
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/srf"
+        name: Get SRF List
+        meta:
+          id: req_emergencies_srf_list
+          created: 1764934800003
+          modified: 1764934800003
+          isPrivate: false
+          description: "Get all SRF entries"
+          sortKey: -1764934800003
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/srf/1"
+        name: Get SRF by ID
+        meta:
+          id: req_emergencies_srf_by_id
+          created: 1764934800004
+          modified: 1764934800004
+          isPrivate: false
+          description: "Get specific SRF by ID"
+          sortKey: -1764934800004
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/srf_entries"
+        name: Get SRF Entries
+        meta:
+          id: req_emergencies_srf_entries
+          created: 1764934800005
+          modified: 1764934800005
+          isPrivate: false
+          description: "Get all SRF entries"
+          sortKey: -1764934800005
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/package"
+        name: Get Package List
+        meta:
+          id: req_emergencies_package_list
+          created: 1764934800006
+          modified: 1764934800006
+          isPrivate: false
+          description: "Get all packages"
+          sortKey: -1764934800006
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/package/1"
+        name: Get Package by ID
+        meta:
+          id: req_emergencies_package_by_id
+          created: 1764934800007
+          modified: 1764934800007
+          isPrivate: false
+          description: "Get specific package by ID"
+          sortKey: -1764934800007
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/package_external"
+        name: Get Package External
+        meta:
+          id: req_emergencies_package_external
+          created: 1764934800008
+          modified: 1764934800008
+          isPrivate: false
+          description: "Get external package donations"
+          sortKey: -1764934800008
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/package_external_names"
+        name: Get Package External Names
+        meta:
+          id: req_emergencies_package_external_names
+          created: 1764934800009
+          modified: 1764934800009
+          isPrivate: false
+          description: "Get external package donor names"
+          sortKey: -1764934800009
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/package_external_addresses"
+        name: Get Package External Addresses
+        meta:
+          id: req_emergencies_package_external_addresses
+          created: 1764934800010
+          modified: 1764934800010
+          isPrivate: false
+          description: "Get external package donor addresses"
+          sortKey: -1764934800010
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/package_entries"
+        name: Get Package Entries
+        meta:
+          id: req_emergencies_package_entries
+          created: 1764934800011
+          modified: 1764934800011
+          isPrivate: false
+          description: "Get package entries"
+          sortKey: -1764934800011
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/anual_report"
+        name: Get Annual Report
+        meta:
+          id: req_emergencies_anual_report
+          created: 1764934800012
+          modified: 1764934800012
+          isPrivate: false
+          description: "Get annual emergency report"
+          sortKey: -1764934800012
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/pl"
+        name: Get Packing List
+        meta:
+          id: req_emergencies_pl
+          created: 1764934800013
+          modified: 1764934800013
+          isPrivate: false
+          description: "Get packing list"
+          sortKey: -1764934800013
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/pl/1"
+        name: Get Packing List by ID
+        meta:
+          id: req_emergencies_pl_by_id
+          created: 1764934800014
+          modified: 1764934800014
+          isPrivate: false
+          description: "Get packing list by PL number ID"
+          sortKey: -1764934800014
+        method: GET
+        authentication:
+          type: bearer
+          token: "{{token}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/units"
+        name: Get Units
+        meta:
+          id: req_emergencies_units
+          created: 1764934800015
+          modified: 1764934800015
+          isPrivate: false
+          description: "Get emergency units"
+          sortKey: -1764934800015
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/shipping_units"
+        name: Get Shipping Units
+        meta:
+          id: req_emergencies_shipping_units
+          created: 1764934800016
+          modified: 1764934800016
+          isPrivate: false
+          description: "Get shipping units"
+          sortKey: -1764934800016
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/v1/emergencies/shipping_sub_units"
+        name: Get Shipping Sub Units
+        meta:
+          id: req_emergencies_shipping_sub_units
+          created: 1764934800017
+          modified: 1764934800017
+          isPrivate: false
+          description: "Get shipping sub units"
+          sortKey: -1764934800017
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_192c22f020090679aafbf99fde30f92d5ada737a
+    created: 1764571721765
+    modified: 1764872880777
+  cookies: []
+environments:
+  name: Base Environment
+  meta:
+    id: env_192c22f020090679aafbf99fde30f92d5ada737a
+    created: 1764571721764
+    modified: 1764934523619
+    isPrivate: false
+  data:
+    base_url: localhost:8080/api
+    token: ""

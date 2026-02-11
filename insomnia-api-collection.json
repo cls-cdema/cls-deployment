@@ -1,0 +1,885 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-12-05T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "wrk_cls_api",
+      "_type": "workspace",
+      "name": "CLS API",
+      "description": "API collection for CLS application",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost/api",
+        "token": ""
+      },
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "folder_auth",
+      "_type": "request_group",
+      "name": "Authentication",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_auth_login",
+      "_type": "request",
+      "name": "Login",
+      "method": "POST",
+      "url": "{{ _.base_url }}/v1/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password\"\n}"
+      },
+      "parentId": "folder_auth"
+    },
+    {
+      "_id": "req_auth_refresh",
+      "_type": "request",
+      "name": "Refresh Token",
+      "method": "POST",
+      "url": "{{ _.base_url }}/v1/auth/refresh",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_auth"
+    },
+    {
+      "_id": "req_auth_logout",
+      "_type": "request",
+      "name": "Logout",
+      "method": "POST",
+      "url": "{{ _.base_url }}/v1/auth/logout",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_auth"
+    },
+    {
+      "_id": "req_auth_check",
+      "_type": "request",
+      "name": "Check Auth",
+      "method": "GET",
+      "url": "{{ _.base_url }}/auth/check",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_auth"
+    },
+    {
+      "_id": "folder_categories",
+      "_type": "request_group",
+      "name": "Categories",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_categories_list",
+      "_type": "request",
+      "name": "List Categories",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/categories",
+      "parentId": "folder_categories"
+    },
+    {
+      "_id": "req_categories_by_id",
+      "_type": "request",
+      "name": "Get Category by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/categories/1",
+      "parentId": "folder_categories"
+    },
+    {
+      "_id": "req_categories_by_name",
+      "_type": "request",
+      "name": "Get Category by Name",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/categories/category-name",
+      "parentId": "folder_categories"
+    },
+    {
+      "_id": "folder_countries",
+      "_type": "request_group",
+      "name": "Countries",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_countries_list",
+      "_type": "request",
+      "name": "List Countries",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/countries",
+      "parentId": "folder_countries"
+    },
+    {
+      "_id": "req_countries_by_id",
+      "_type": "request",
+      "name": "Get Country by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/countries/1",
+      "parentId": "folder_countries"
+    },
+    {
+      "_id": "req_countries_by_name",
+      "_type": "request",
+      "name": "Get Country by Name",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/countries/country-name",
+      "parentId": "folder_countries"
+    },
+    {
+      "_id": "folder_delivery_modes",
+      "_type": "request_group",
+      "name":  "Get Delivery Modes",
+      "method":"GET",
+      "url": "{{ _.base_url }}/v1/categories/1",
+      "parentId": "folder_categories"
+    },
+    {
+      "_id": "req_categories_by_name",
+      "_type": "request",
+      "name": "Get Category by Name",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/categories/category-name",
+      "parentId": "folder_categories"
+    },
+    {
+      "_id": "folder_countries",
+      "_type": "request_group",
+      "name": "Countries",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_countries_list",
+      "_type": "request",
+      "name": "List Countries",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/countries",
+      "parentId": "folder_countries"
+    },
+    {
+      "_id": "req_countries_by_id",
+      "_type": "request",
+      "name": "Get Country by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/countries/1",
+      "parentId": "folder_countries"
+    },
+    {
+      "_id": "req_countries_by_name",
+      "_type": "request",
+      "name": "Get Country by Name",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/countries/country-name",
+      "parentId": "folder_countries"
+    },
+    {
+      "_id": "folder_delivery_modes",
+      "_type": "request_group",
+      "name": "Delivery Modes",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_delivery_modes_list",
+      "_type": "request",
+      "name": "List Delivery Modes",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/deliveryModes",
+      "parentId": "folder_delivery_modes"
+    },
+    {
+      "_id": "folder_users",
+      "_type": "request_group",
+      "name": "Users",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_users_list",
+      "_type": "request",
+      "name": "List Users",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/users",
+      "parentId": "folder_users"
+    },
+    {
+      "_id": "req_users_by_id",
+      "_type": "request",
+      "name": "Get User by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/users/1",
+      "parentId": "folder_users"
+    },
+    {
+      "_id": "req_users_by_country",
+      "_type": "request",
+      "name": "Get Users by Country",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/users/country/1",
+      "parentId": "folder_users"
+    },
+    {
+      "_id": "req_users_existing",
+      "_type": "request",
+      "name": "Check Existing User",
+      "method": "POST",
+      "url": "{{ _.base_url }}/v1/users/existing",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user@example.com\"\n}"
+      },
+      "parentId": "folder_users"
+    },
+    {
+      "_id": "folder_roles",
+      "_type": "request_group",
+      "name": "Roles",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_roles_list",
+      "_type": "request",
+      "name": "List Roles",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/users/roles",
+      "parentId": "folder_roles"
+    },
+    {
+      "_id": "folder_organizations",
+      "_type": "request_group",
+      "name": "Organizations",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_organizations_list",
+      "_type": "request",
+      "name": "List Organizations",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/organizations",
+      "parentId": "folder_organizations"
+    },
+    {
+      "_id": "req_organizations_by_id",
+      "_type": "request",
+      "name": "Get Organization by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/organizations/1",
+      "parentId": "folder_organizations"
+    },
+    {
+      "_id": "req_organizations_all",
+      "_type": "request",
+      "name": "Get All Organizations",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/organizations/all",
+      "parentId": "folder_organizations"
+    },
+    {
+      "_id": "req_organizations_addresses",
+      "_type": "request",
+      "name": "Get Organization Addresses",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/organizations/addresses",
+      "parentId": "folder_organizations"
+    },
+    {
+      "_id": "req_organizations_types",
+      "_type": "request",
+      "name": "Get Organization Types",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/organizations/types",
+      "parentId": "folder_organizations"
+    },
+    {
+      "_id": "folder_tracking",
+      "_type": "request_group",
+      "name": "Tracking",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_tracking_list",
+      "_type": "request",
+      "name": "List Trackings",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/trackings/list",
+      "parentId": "folder_tracking"
+    },
+    {
+      "_id": "req_tracking_by_package",
+      "_type": "request",
+      "name": "Get Tracking by Package Number",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/trackings/list/PKG123",
+      "parentId": "folder_tracking"
+    },
+    {
+      "_id": "folder_active_tracking",
+      "_type": "request_group",
+      "name": "Active Tracking",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_active_tracking_devices",
+      "_type": "request",
+      "name": "Get Devices",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/activetrackings/devices",
+      "parentId": "folder_active_tracking"
+    },
+    {
+      "_id": "req_active_tracking_devices_by_id",
+      "_type": "request",
+      "name": "Get Device by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/activetrackings/devices/1",
+      "parentId": "folder_active_tracking"
+    },
+    {
+      "_id": "req_active_tracking_positions",
+      "_type": "request",
+      "name": "Get Device Positions",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/activetrackings/positions/1/1",
+      "parentId": "folder_active_tracking"
+    },
+    {
+      "_id": "folder_locations",
+      "_type": "request_group",
+      "name": "Locations",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_locations_list",
+      "_type": "request",
+      "name": "List Locations",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/locations",
+      "parentId": "folder_locations"
+    },
+    {
+      "_id": "req_locations_by_id",
+      "_type": "request",
+      "name": "Get Location by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/locations/1",
+      "parentId": "folder_locations"
+    },
+    {
+      "_id": "req_locations_info",
+      "_type": "request",
+      "name": "Get Location Info",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/locations/info/1",
+      "parentId": "folder_locations"
+    },
+    {
+      "_id": "req_locations_warehouse",
+      "_type": "request",
+      "name": "Get Warehouse Locations",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/locations/warehouse",
+      "parentId": "folder_locations"
+    },
+    {
+      "_id": "req_locations_types",
+      "_type": "request",
+      "name": "Get Location Types",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/locations/types",
+      "parentId": "folder_locations"
+    },
+    {
+      "_id": "folder_mail_lists",
+      "_type": "request_group",
+      "name": "Mail Lists",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_mail_lists_list",
+      "_type": "request",
+      "name": "List Mail Lists",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/mail_lists",
+      "parentId": "folder_mail_lists"
+    },
+    {
+      "_id": "req_mail_lists_by_id",
+      "_type": "request",
+      "name": "Get Mail List by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/mail_lists/1",
+      "parentId": "folder_mail_lists"
+    },
+    {
+      "_id": "req_mail_lists_by_country",
+      "_type": "request",
+      "name": "Get Mail List by Country",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/mail_lists/country/1",
+      "parentId": "folder_mail_lists"
+    },
+    {
+      "_id": "folder_notifications",
+      "_type": "request_group",
+      "name": "Notifications",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_notifications_list",
+      "_type": "request",
+      "name": "List Notifications",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/notifications",
+      "parentId": "folder_notifications"
+    },
+    {
+      "_id": "req_notifications_org_country",
+      "_type": "request",
+      "name": "Get Organization Country Notifications",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/notifications/organization_country_notifications/1/1/1",
+      "parentId": "folder_notifications"
+    },
+    {
+      "_id": "folder_releasing_authority",
+      "_type": "request_group",
+      "name": "Releasing Authority",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_ra_get",
+      "_type": "request",
+      "name": "Get Releasing Authority",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/ra/1/1",
+      "parentId": "folder_releasing_authority"
+    },
+    {
+      "_id": "folder_stocks",
+      "_type": "request_group",
+      "name": "Stocks (Auth Required)",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_stocks_list",
+      "_type": "request",
+      "name": "List Stocks",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/stocks",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_stocks"
+    },
+    {
+      "_id": "req_stocks_by_countries",
+      "_type": "request",
+      "name": "Get Stocks by Countries",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/stocks/countries/1,2,3",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_stocks"
+    },
+    {
+      "_id": "req_stocks_transits",
+      "_type": "request",
+      "name": "Get Stock Transits",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/stocks/transits",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_stocks"
+    },
+    {
+      "_id": "req_stocks_holdings",
+      "_type": "request",
+      "name": "Get Stock Holdings",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/stocks/holdings",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_stocks"
+    },
+    {
+      "_id": "req_stocks_exceptions",
+      "_type": "request",
+      "name": "Get Stock Exceptions",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/stocks/exceptions",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_stocks"
+    },
+    {
+      "_id": "req_stocks_item_units",
+      "_type": "request",
+      "name": "Get Item Units",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/item_units",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_stocks"
+    },
+    {
+      "_id": "req_stocks_items",
+      "_type": "request",
+      "name": "Get Items",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/items",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_stocks"
+    },
+    {
+      "_id": "req_stocks_readjust",
+      "_type": "request",
+      "name": "Readjust Stocks",
+      "method": "POST",
+      "url": "{{ _.base_url }}/v1/readjust_stocks",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"stock_id\": 1,\n  \"quantity\": 100\n}"
+      },
+      "parentId": "folder_stocks"
+    },
+    {
+      "_id": "req_stocks_adjust",
+      "_type": "request",
+      "name": "Adjust Stocks",
+      "method": "POST",
+      "url": "{{ _.base_url }}/v1/adjust_stocks",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"stock_id\": 1,\n  \"adjustment\": 10\n}"
+      },
+      "parentId": "folder_stocks"
+    },
+    {
+      "_id": "folder_emergencies",
+      "_type": "request_group",
+      "name": "Emergencies (Auth Required)",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_emergencies_srf_holds",
+      "_type": "request",
+      "name": "Get SRF Holds",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/srf_holds",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_srf_holds_no_packages",
+      "_type": "request",
+      "name": "Get SRF Holds (No Packages)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/srf_holds_no_packages",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_srf",
+      "_type": "request",
+      "name": "Get SRF",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/srf",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_srf_by_id",
+      "_type": "request",
+      "name": "Get SRF by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/srf/1",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_srf_entries",
+      "_type": "request",
+      "name": "Get SRF Entries",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/srf_entries",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_package",
+      "_type": "request",
+      "name": "Get Package",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/package",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_package_by_id",
+      "_type": "request",
+      "name": "Get Package by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/package/1",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_package_external",
+      "_type": "request",
+      "name": "Get Package External",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/package_external",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_package_external_names",
+      "_type": "request",
+      "name": "Get Package External Names",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/package_external_names",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_package_external_addresses",
+      "_type": "request",
+      "name": "Get Package External Addresses",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/package_external_addresses",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_package_entries",
+      "_type": "request",
+      "name": "Get Package Entries",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/package_entries",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_anual_report",
+      "_type": "request",
+      "name": "Get Annual Report",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/anual_report",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_pl",
+      "_type": "request",
+      "name": "Get Packing List",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/pl",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_units",
+      "_type": "request",
+      "name": "Get Units",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/units",
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_shipping_units",
+      "_type": "request",
+      "name": "Get Shipping Units",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/shipping_units",
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "req_emergencies_shipping_sub_units",
+      "_type": "request",
+      "name": "Get Shipping Sub Units",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/emergencies/shipping_sub_units",
+      "parentId": "folder_emergencies"
+    },
+    {
+      "_id": "folder_logs",
+      "_type": "request_group",
+      "name": "Logs (Auth Required)",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_logs_list",
+      "_type": "request",
+      "name": "List Logs",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/logs",
+      "parentId": "folder_logs"
+    },
+    {
+      "_id": "req_logs_create",
+      "_type": "request",
+      "name": "Create Log",
+      "method": "POST",
+      "url": "{{ _.base_url }}/v1/logs/create",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"user_id\": 1,\n  \"tag\": \"info\",\n  \"message\": \"Log message\"\n}"
+      },
+      "parentId": "folder_logs"
+    },
+    {
+      "_id": "folder_modules",
+      "_type": "request_group",
+      "name": "Modules",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_modules_request_init",
+      "_type": "request",
+      "name": "Request Init",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/modules/request_init",
+      "parentId": "folder_modules"
+    },
+    {
+      "_id": "req_modules_srf_holds",
+      "_type": "request",
+      "name": "Get SRF Holds",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/modules/srf_holds",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "parentId": "folder_modules"
+    },
+    {
+      "_id": "folder_warehouses",
+      "_type": "request_group",
+      "name": "Warehouses",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_warehouses_generate",
+      "_type": "request",
+      "name": "Generate Warehouse",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/warehouses/generate",
+      "parentId": "folder_warehouses"
+    },
+    {
+      "_id": "folder_twilio",
+      "_type": "request_group",
+      "name": "Twilio",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_twilio_phones",
+      "_type": "request",
+      "name": "Get Phones",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/twilio/phones",
+      "parentId": "folder_twilio"
+    },
+    {
+      "_id": "folder_needs",
+      "_type": "request_group",
+      "name": "Needs",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_needs_list",
+      "_type": "request",
+      "name": "List Needs",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/needs",
+      "parentId": "folder_needs"
+    },
+    {
+      "_id": "folder_regions",
+      "_type": "request_group",
+      "name": "Regions",
+      "parentId": "wrk_cls_api"
+    },
+    {
+      "_id": "req_regions_list",
+      "_type": "request",
+      "name": "List Regions",
+      "method": "GET",
+      "url": "{{ _.base_url }}/v1/regions",
+      "parentId": "folder_regions"
+    }
+  ]
+}
